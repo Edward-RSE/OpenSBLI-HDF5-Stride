@@ -129,7 +129,7 @@ ops_printf("\nTimings are:\n");
 ops_printf("-----------------------------------------\n");
 ops_printf("Total Wall time %lf\n",elapsed_end0-elapsed_start0);
 
-HDF5_IO_Write_0_opensbliblock00(opensbliblock00, phi_B0, x0_B0, HDF5_timing);
+// HDF5_IO_Write_0_opensbliblock00(opensbliblock00, phi_B0, x0_B0, HDF5_timing);
 hdf5_strided(opensbliblock00, phi_B0, x0_B0, 2, HDF5_timing);
 
 ops_exit();
