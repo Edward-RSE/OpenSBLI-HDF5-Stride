@@ -1,6 +1,6 @@
 #!/bin/bash
 
-rm -r build && mkdir build && cd build || { echo "Failed to initialise build directory"; exit; }
+rm -rf build && mkdir build && cd build || { echo "Failed to initialise build directory"; exit; }
 
 OPS_INSTALL_DIR="$HOME/srsg-projects/opensbli/OPS-INSTALL"
 HDF5_INSTALL_DIR="$HOME/srsg-projects/opensbli/HDF5"
