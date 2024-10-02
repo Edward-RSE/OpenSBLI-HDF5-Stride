@@ -1,13 +1,13 @@
-void write_constants(const char* filename){
-ops_write_const_hdf5("Delta0block0", 1, "double", (char*)&Delta0block0, filename);
-ops_write_const_hdf5("HDF5_timing", 1, "int", (char*)&HDF5_timing, filename);
-ops_write_const_hdf5("block0np0", 1, "int", (char*)&block0np0, filename);
-ops_write_const_hdf5("c0", 1, "double", (char*)&c0, filename);
-ops_write_const_hdf5("dt", 1, "double", (char*)&dt, filename);
-ops_write_const_hdf5("niter", 1, "int", (char*)&niter, filename);
-ops_write_const_hdf5("simulation_time", 1, "double", (char*)&simulation_time, filename);
-ops_write_const_hdf5("start_iter", 1, "int", (char*)&start_iter, filename);
-ops_write_const_hdf5("iter", 1, "int", (char*)&iter, filename);
+void write_constants(const char *filename) {
+  ops_write_const_hdf5("Delta0block0", 1, "double", (char *)&Delta0block0, filename);
+  ops_write_const_hdf5("HDF5_timing", 1, "int", (char *)&HDF5_timing, filename);
+  ops_write_const_hdf5("block0np0", 1, "int", (char *)&block0np0, filename);
+  ops_write_const_hdf5("c0", 1, "double", (char *)&c0, filename);
+  ops_write_const_hdf5("dt", 1, "double", (char *)&dt, filename);
+  ops_write_const_hdf5("niter", 1, "int", (char *)&niter, filename);
+  ops_write_const_hdf5("simulation_time", 1, "double", (char *)&simulation_time, filename);
+  ops_write_const_hdf5("start_iter", 1, "int", (char *)&start_iter, filename);
+  ops_write_const_hdf5("iter", 1, "int", (char *)&iter, filename);
 }
 
 // void HDF5_IO_Write_0_opensbliblock00(ops_block& opensbliblock00, ops_dat& phi_B0, ops_dat& x0_B0, int HDF5_timing){
@@ -44,9 +44,14 @@ void hdf5_strided(ops_block &block, ops_dat &phi_B0, ops_dat &x0_B0, int stride,
 
   char name[NAME_LENGTH] = "opensbli_output.h5";
 
+  ops_dat phi_B0_strided = ops_decl_dat(block, 1, phi_B0->size, phi_B0->base, phi_B0->d_m, phi_B0->d_p, phi_B0->data,
+                                        phi_B0->type, phi_B0->name);
+
   // Writing OPS datasets
+  // TODO: write a python script which compares the correct output to the strided data file
   ops_fetch_block_hdf5_file(block, name);
   ops_fetch_dat_hdf5_file(phi_B0, name);
+  ops_fetch_dat_hdf5_file(phi_B0_strided, name);
   ops_fetch_dat_hdf5_file(x0_B0, name);
 
   // Writing simulation constants
