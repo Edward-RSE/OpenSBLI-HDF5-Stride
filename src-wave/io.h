@@ -35,22 +35,48 @@ void write_constants(const char *filename) {
 
 #define NAME_LENGTH 80
 
+ops_dat take_strided_slice(ops_dat dat, int stride) {
+
+  for (int i = 0; i < OPS_MAX_DIM; ++i) {
+    dat->size[i] = ceil(dat->size[i] / stride);
+  }
+
+  /* these actually need to be the sum of size, rather than indexed to [0] */
+  int new_size[OPS_MAX_DIM] = {dat->size[0] - dat->d_p[0] + dat->d_m[0]};
+  char *data_slice = (char *)malloc(new_size[0] * sizeof(char));
+
+  /* So the problem here is that ops_dat->data is a char*, so we need to be
+     smarter about how we copy the data from ops_data->data to data and how
+     we set the type */
+  /* We also should start from the halo and not from the beginning, and vice
+     versa for the end of the array */
+  for (int i = abs(dat->d_m[0]); i < new_size[0] - dat->d_p[0]; i++) { /* again, needs to over the sum of new_size */
+    const int stride_index = i * stride;
+    if (stride_index >= block0np0) {
+      break;
+    }
+    data_slice[i] = dat->data[stride_index];
+  }
+
+  // return ops_decl_dat(dat->block, 1, new_size, dat->base, dat->d_m, dat->d_p, data_slice, dat->type, dat->name);
+  return ops_decl_dat(dat->block, dat->dim, dat->size, dat->base, dat->d_m, dat->d_p, data_slice, dat->type,
+                      "phi_B0_strided");
+}
+
 void hdf5_strided(ops_block &block, ops_dat &phi_B0, ops_dat &x0_B0, int stride, int hdf5_timing) {
+  char name[NAME_LENGTH] = "opensbli_output.h5";
 
   double cpu_start0, elapsed_start0;
   if (hdf5_timing == 1) {
     ops_timers(&cpu_start0, &elapsed_start0);
   }
 
-  char name[NAME_LENGTH] = "opensbli_output.h5";
-
-  ops_dat phi_B0_strided = ops_decl_dat(block, 1, phi_B0->size, phi_B0->base, phi_B0->d_m, phi_B0->d_p, phi_B0->data,
-                                        phi_B0->type, phi_B0->name);
+  // Taking strided slice of each ops_dat dataset
+  ops_dat phi_B0_strided = take_strided_slice(phi_B0, stride);
 
   // Writing OPS datasets
-  // TODO: write a python script which compares the correct output to the strided data file
   ops_fetch_block_hdf5_file(block, name);
-  ops_fetch_dat_hdf5_file(phi_B0, name);
+  // ops_fetch_dat_hdf5_file(phi_B0, name);
   ops_fetch_dat_hdf5_file(phi_B0_strided, name);
   ops_fetch_dat_hdf5_file(x0_B0, name);
 
