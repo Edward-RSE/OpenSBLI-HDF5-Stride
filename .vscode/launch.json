@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug: wave_seq",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/src-wave/build/wave_seq",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/src-wave",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "preLaunchTask": "Build wave"
+        }
+    ]
+}
