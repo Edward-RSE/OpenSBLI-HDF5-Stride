@@ -1,3 +1,22 @@
+FILE *_debugfp;
+
+void _debug_init(const char *name) {
+  char fn[80];
+  snprintf(fn, 80, "_debug/%s.txt", name);
+  _debugfp = fopen(fn, "w");
+}
+
+void _debug_close(void) { fclose(_debugfp); }
+
+void _debug_fprint(const char *element) {
+  double value = -1;
+  memcpy(&value, element, sizeof(double));
+  fprintf(_debugfp, "%e\n", value);
+}
+
+/*
+ * Writes constants to the HDF5
+ */
 void write_constants(const char *filename) {
   ops_write_const_hdf5("Delta0block0", 1, "double", (char *)&Delta0block0, filename);
   ops_write_const_hdf5("HDF5_timing", 1, "int", (char *)&HDF5_timing, filename);
@@ -14,62 +33,44 @@ void write_constants(const char *filename) {
  * Takes an input dataset to create a new strided dataset
  */
 ops_dat take_strided_slice(ops_dat dat, int stride) {
+  _debug_init(dat->name);
   /*
-   * First, figure out he size of the dataset minus the padding for halos
+   * First, figure out the size of the dataset minus the padding for halos and
+   * memory alignment (x_pad, I think). We also need to know how much elements
+   * there are in total, so we can allocate enough memory for new_data.
    */
-  int total_size = 0;
-  int new_size[OPS_MAX_DIM] = {1};
+  size_t total_size = 0;
+  int new_size[OPS_MAX_DIM] = {-1};
   for (int i = 0; i < OPS_MAX_DIM; ++i) {
-    total_size += dat->size[i];
-    new_size[i] = dat->size[i]; //- dat->d_p[i] + dat->d_m[i];
+    if (dat->size[i] > 1) {
+      new_size[i] = (dat->size[i] + dat->d_m[i] - dat->d_p[i]) / stride;
+    } else {
+      new_size[i] = dat->size[i];
+    }
+    total_size += new_size[i];
   }
-
-  /* Next, we need to get data from dat->data into a new array. We have to
-   * essentially do this element-by-element and be careful of padding. This
-   * padding includes MPI halos and padding for memory alignment
-   */
-  size_t new_data_position = 0;
-  char *new_data = (char *)ops_malloc(total_size * dat->elem_size);
-
-  /*
-   * Let's get this working in 1D for now, and disregard anything to do with
-   * other dimensions. So this effectively removes the loop over OPS_MAX_DIM and
-   * instead we'll loop over the dat->size[0] excluding the padding
-   */
-
-  char name[80];
-  snprintf(name, 80, "_debug/%s-%d.txt", dat->name, stride);
-  FILE *fp = fopen(name, "w");
-
-  double sneak_peak = -1;
-  for (int i = 0; i < dat->size[0]; ++i) {
-    const size_t index_new = new_data_position * dat->elem_size;
-    const size_t index_dat = i * dat->elem_size;
-    memcpy(&new_data[index_new], &dat->data[index_dat], dat->elem_size);
-
-    /*
-     * This is for debug
-     */
-    memcpy(&sneak_peak, &new_data[index_new], dat->elem_size);
-    fprintf(fp, "%e\n", sneak_peak);
-
-    new_data_position += 1;
-  }
-
-  fclose(fp);
 
   /*
    * Create a new data set and then replace the old data and size with the
-   * new ones we've created
+   * new ones we've created. double *_dummy is required so ops_decl_dat will
+   * allocate enough memory as it takes the type of dummy to determine the size
+   * of each element in the data set.
    */
   double *_dummy = NULL;
   ops_dat new_dat =
-      ops_decl_dat(dat->block, dat->dim, dat->size, dat->base, dat->d_m, dat->d_p, _dummy, dat->type, dat->name);
-  for (int i = 0; i < OPS_MAX_DIM; ++i) {
-    new_dat->size[i] = new_size[i];
+      ops_decl_dat(dat->block, dat->dim, new_size, dat->base, dat->d_m, dat->d_p, _dummy, dat->type, dat->name);
+
+  size_t position = 0;
+
+  for (int i = 0; i < dat->size[0]; i += stride) {
+    const size_t index_old = i * dat->elem_size;
+    const size_t index_new = position * dat->elem_size;
+    memcpy(&new_dat->data[index_new], &dat->data[index_old], dat->elem_size);
+    position += 1;
+    _debug_fprint(&new_dat->data[index_new]);
   }
-  new_dat->data = new_data;
-  new_dat->mem = total_size * new_dat->elem_size;
+
+  _debug_close();
 
   return new_dat;
 }
