@@ -25,11 +25,13 @@ def main(args):
 
     x = original["opensbliblock00"]["x0_B0"][5:-5]
     y = original["opensbliblock00"]["phi_B0"][5:-5]
+    print(y)
     ax.plot(x, y, label="Original")
 
     x = new["opensbliblock00"]["x0_B0"][5:-5]
     y = new["opensbliblock00"]["phi_B0"][5:-5]
-    ax.plot(x, y, label="New")
+    print(y)
+    ax.plot(x, y, label="New (strided)")
 
     ax.set_xlabel("$x$")
     ax.set_ylabel(r"$\phi(x)$")
