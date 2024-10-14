@@ -303,6 +303,10 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 .idea/
 
+# VSCode
+.vscodepython ../scripts/compare-wave.py ../data/wave-reference.h5 opensbli_output-strided.h5
+
 # Project specific
 *.h5
 latex_output
+**/_debug
