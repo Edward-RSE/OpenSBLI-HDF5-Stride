@@ -8,6 +8,14 @@
             "options": {
                 "cwd": "${workspaceFolder}/src-wave"
             }
+        },
+        {
+            "label": "Clean up build",
+            "type": "shell",
+            "command": "rm -rf build/",
+            "options": {
+                "cwd": "${workspaceFolder}/src-wave"
+            }
         }
     ]
 }

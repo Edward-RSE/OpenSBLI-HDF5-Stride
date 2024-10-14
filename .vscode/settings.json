@@ -15,8 +15,26 @@
         "**/*.lot": true,
         "**/*.o": true,
         "**/*.synctex.gz": true,
-        "**/*.toc": true,
-        "**/.vscode": true
+        "**/*.toc": true
     },
-    "explorerExclude.backup": {}
+    "explorerExclude.backup": {},
+    "files.associations": {
+        "*.rd": "xml",
+        "__hash_table": "cpp",
+        "__split_buffer": "cpp",
+        "__tree": "cpp",
+        "array": "cpp",
+        "bitset": "cpp",
+        "deque": "cpp",
+        "initializer_list": "cpp",
+        "map": "cpp",
+        "queue": "cpp",
+        "span": "cpp",
+        "stack": "cpp",
+        "string": "cpp",
+        "string_view": "cpp",
+        "unordered_map": "cpp",
+        "vector": "cpp",
+        "format": "cpp"
+    },
 }
