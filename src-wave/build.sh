@@ -5,7 +5,7 @@ export CXX=/opt/homebrew/bin/g++-14
 export OMPI_CC=$CC
 export OMPI_CXX=$CXX
 
-OPS_INSTALL_DIR="$HOME/srsg-projects/opensbli/OPS-INSTALL"
+OPS_INSTALL_DIR="$HOME/srsg-projects/opensbli/OPS-INSTALL-DEBUG"
 HDF5_INSTALL_DIR="$HOME/srsg-projects/opensbli/HDF5"
 
 rm -rf build && mkdir build && cd build || { echo "Failed to initialise build directory"; exit; }
