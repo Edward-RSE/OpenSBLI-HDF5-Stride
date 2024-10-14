@@ -10,61 +10,75 @@ void write_constants(const char *filename) {
   ops_write_const_hdf5("iter", 1, "int", (char *)&iter, filename);
 }
 
-// void HDF5_IO_Write_0_opensbliblock00(ops_block& opensbliblock00, ops_dat& phi_B0, ops_dat& x0_B0, int HDF5_timing){
-// double cpu_start0, elapsed_start0;
-// if (HDF5_timing == 1){
-// ops_timers(&cpu_start0, &elapsed_start0);
-// }
-// // Writing OPS datasets
-// char name0[80];
-// sprintf(name0, "opensbli_output.h5");
-// ops_fetch_block_hdf5_file(opensbliblock00, name0);
-// ops_fetch_dat_hdf5_file(phi_B0, name0);
-// ops_fetch_dat_hdf5_file(x0_B0, name0);
-// // Writing simulation constants
-// write_constants(name0);
-// if (HDF5_timing == 1){
-// double cpu_end0, elapsed_end0;
-// ops_timers(&cpu_end0, &elapsed_end0);
-// ops_printf("-----------------------------------------\n");
-// ops_printf("Time to write HDF5 file: %s: %lf\n", name0, elapsed_end0-elapsed_start0);
-// ops_printf("-----------------------------------------\n");
-
-// }
-// }
-
-#define NAME_LENGTH 80
-
+/*
+ * Takes an input dataset to create a new strided dataset
+ */
 ops_dat take_strided_slice(ops_dat dat, int stride) {
-
+  /*
+   * First, figure out he size of the dataset minus the padding for halos
+   */
+  int total_size = 0;
+  int new_size[OPS_MAX_DIM] = {1};
   for (int i = 0; i < OPS_MAX_DIM; ++i) {
-    dat->size[i] = ceil(dat->size[i] / stride);
+    total_size += dat->size[i];
+    new_size[i] = dat->size[i]; //- dat->d_p[i] + dat->d_m[i];
   }
 
-  /* these actually need to be the sum of size, rather than indexed to [0] */
-  int new_size[OPS_MAX_DIM] = {dat->size[0] - dat->d_p[0] + dat->d_m[0]};
-  char *data_slice = (char *)malloc(new_size[0] * sizeof(char));
+  /* Next, we need to get data from dat->data into a new array. We have to
+   * essentially do this element-by-element and be careful of padding. This
+   * padding includes MPI halos and padding for memory alignment
+   */
+  size_t new_data_position = 0;
+  char *new_data = (char *)ops_malloc(total_size * dat->elem_size);
 
-  /* So the problem here is that ops_dat->data is a char*, so we need to be
-     smarter about how we copy the data from ops_data->data to data and how
-     we set the type */
-  /* We also should start from the halo and not from the beginning, and vice
-     versa for the end of the array */
-  for (int i = abs(dat->d_m[0]); i < new_size[0] - dat->d_p[0]; i++) { /* again, needs to over the sum of new_size */
-    const int stride_index = i * stride;
-    if (stride_index >= block0np0) {
-      break;
-    }
-    data_slice[i] = dat->data[stride_index];
+  /*
+   * Let's get this working in 1D for now, and disregard anything to do with
+   * other dimensions. So this effectively removes the loop over OPS_MAX_DIM and
+   * instead we'll loop over the dat->size[0] excluding the padding
+   */
+
+  char name[80];
+  snprintf(name, 80, "_debug/%s-%d.txt", dat->name, stride);
+  FILE *fp = fopen(name, "w");
+
+  double sneak_peak = -1;
+  for (int i = 0; i < dat->size[0]; ++i) {
+    const size_t index_new = new_data_position * dat->elem_size;
+    const size_t index_dat = i * dat->elem_size;
+    memcpy(&new_data[index_new], &dat->data[index_dat], dat->elem_size);
+
+    /*
+     * This is for debug
+     */
+    memcpy(&sneak_peak, &new_data[index_new], dat->elem_size);
+    fprintf(fp, "%e\n", sneak_peak);
+
+    new_data_position += 1;
   }
 
-  // return ops_decl_dat(dat->block, 1, new_size, dat->base, dat->d_m, dat->d_p, data_slice, dat->type, dat->name);
-  return ops_decl_dat(dat->block, dat->dim, dat->size, dat->base, dat->d_m, dat->d_p, data_slice, dat->type,
-                      "phi_B0_strided");
+  fclose(fp);
+
+  /*
+   * Create a new data set and then replace the old data and size with the
+   * new ones we've created
+   */
+  double *_dummy = NULL;
+  ops_dat new_dat =
+      ops_decl_dat(dat->block, dat->dim, dat->size, dat->base, dat->d_m, dat->d_p, _dummy, dat->type, dat->name);
+  for (int i = 0; i < OPS_MAX_DIM; ++i) {
+    new_dat->size[i] = new_size[i];
+  }
+  new_dat->data = new_data;
+  new_dat->mem = total_size * new_dat->elem_size;
+
+  return new_dat;
 }
 
+/*
+ * Main steering function for strided HDF5 output
+ */
 void hdf5_strided(ops_block &block, ops_dat &phi_B0, ops_dat &x0_B0, int stride, int hdf5_timing) {
-  char name[NAME_LENGTH] = "opensbli_output.h5";
+  char name[80] = "opensbli_output-strided.h5";
 
   double cpu_start0, elapsed_start0;
   if (hdf5_timing == 1) {
@@ -73,12 +87,12 @@ void hdf5_strided(ops_block &block, ops_dat &phi_B0, ops_dat &x0_B0, int stride,
 
   // Taking strided slice of each ops_dat dataset
   ops_dat phi_B0_strided = take_strided_slice(phi_B0, stride);
+  ops_dat x0_B0_strided = take_strided_slice(x0_B0, stride);
 
   // Writing OPS datasets
   ops_fetch_block_hdf5_file(block, name);
-  // ops_fetch_dat_hdf5_file(phi_B0, name);
+  ops_fetch_dat_hdf5_file(x0_B0_strided, name);
   ops_fetch_dat_hdf5_file(phi_B0_strided, name);
-  ops_fetch_dat_hdf5_file(x0_B0, name);
 
   // Writing simulation constants
   write_constants(name);
