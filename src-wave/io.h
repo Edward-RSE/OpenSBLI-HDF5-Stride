@@ -33,44 +33,47 @@ void write_constants(const char *filename) {
  * Takes an input dataset to create a new strided dataset
  */
 ops_dat take_strided_slice(ops_dat dat, int stride) {
-  _debug_init(dat->name);
   /*
    * First, figure out the size of the dataset minus the padding for halos and
-   * memory alignment (x_pad, I think). We also need to know how much elements
-   * there are in total, so we can allocate enough memory for new_data.
+   * memory alignment (x_pad, I think). We need to re-create d_p without padding
+   * because it contains the value of xpad in the original ops_dat.
    */
-  size_t total_size = 0;
-  int new_size[OPS_MAX_DIM] = {-1};
+  int d_p[OPS_MAX_DIM] = {0};
+  int new_size[OPS_MAX_DIM] = {1};
   for (int i = 0; i < OPS_MAX_DIM; ++i) {
     if (dat->size[i] > 1) {
+      /*
+       * Could instead use block0np0 / stride, because we know during code
+       * generation the size of the block
+       */
       new_size[i] = (dat->size[i] + dat->d_m[i] - dat->d_p[i]) / stride;
-    } else {
-      new_size[i] = dat->size[i];
     }
-    total_size += new_size[i];
   }
-
+  for (int i = 0; i < OPS_MAX_DIM; ++i) {
+    d_p[i] = dat->d_p[i] - dat->x_pad;
+  }
   /*
-   * Create a new data set and then replace the old data and size with the
-   * new ones we've created. double *_dummy is required so ops_decl_dat will
-   * allocate enough memory as it takes the type of dummy to determine the size
-   * of each element in the data set.
+   * Create a new data set, where double *_dummy is required so ops_decl_dat
+   * will allocate enough memory as it takes the type of dummy to determine the
+   * size of each element in the data set.
    */
-  double *_dummy = NULL;
+  double *_dummy = NULL; /* With code generation, this is needs to be smarter */
   ops_dat new_dat =
-      ops_decl_dat(dat->block, dat->dim, new_size, dat->base, dat->d_m, dat->d_p, _dummy, dat->type, dat->name);
-
+      ops_decl_dat(dat->block, dat->dim, new_size, dat->base, dat->d_m, d_p, _dummy, dat->type, dat->name);
+  /*
+   * Using memcpy, copy the ops_dat->data into the new ops_dat->data, one
+   * element at a time. The indices are important, as we want to ignore the
+   * halos, I think.
+   */
   size_t position = 0;
-
-  for (int i = 0; i < dat->size[0]; i += stride) {
-    const size_t index_old = i * dat->elem_size;
-    const size_t index_new = position * dat->elem_size;
-    memcpy(&new_dat->data[index_new], &dat->data[index_old], dat->elem_size);
-    position += 1;
-    _debug_fprint(&new_dat->data[index_new]);
+  for (int i = 0; i < OPS_MAX_DIM; ++i) {
+    for (int j = 0; j < dat->size[i]; j += stride) {
+      const size_t index_old = j * dat->elem_size;
+      const size_t index_new = position * dat->elem_size;
+      memcpy(&new_dat->data[index_new], &dat->data[index_old], dat->elem_size);
+      position += 1;
+    }
   }
-
-  _debug_close();
 
   return new_dat;
 }
