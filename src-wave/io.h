@@ -16,46 +16,67 @@ void write_constants(const char *filename) {
 /*
  * Takes an input dataset to create a new strided dataset
  */
-ops_dat take_strided_slice(ops_dat dat, int stride) {
+ops_dat take_strided_slice(ops_dat dat, size_t stride) {
   /*
    * First, figure out the size of the dataset minus the padding for halos and
    * memory alignment (x_pad, I think). We need to re-create d_p without padding
    * because it contains the value of xpad in the original ops_dat.
    */
-  int d_p[OPS_MAX_DIM] = {0};
-  int new_size[OPS_MAX_DIM] = {1};
-  for (int i = 0; i < OPS_MAX_DIM; ++i) {
-    if (dat->size[i] > 1) {
-      /*
-       * Could instead use block0np0 / stride, because we know during code
-       * generation the size of the block
-       */
-      new_size[i] = (dat->size[i] + dat->d_m[i] - dat->d_p[i]) / stride;
+  int d_p[dat->dim];
+  int new_size[dat->dim];
+  for (size_t i = 0; i < (size_t)dat->dim; ++i) {
+    /*
+     * Could instead use block0np0 / stride, because we know during code
+     * generation the size of the block
+     */
+    new_size[i] = (dat->size[i] + dat->d_m[i] - dat->d_p[i]) / stride;
     }
   }
   for (int i = 0; i < OPS_MAX_DIM; ++i) {
     d_p[i] = dat->d_p[i] - dat->x_pad;
   }
+
   /*
    * Create a new data set, where double *_dummy is required so ops_decl_dat
-   * will allocate enough memory as it takes the type of dummy to determine the
+   * will allocate enough memory as it takes the type of _dummy to determine the
    * size of each element in the data set.
    */
   double *_dummy = NULL; /* With code generation, this is needs to be smarter */
   ops_dat new_dat =
       ops_decl_dat(dat->block, dat->dim, new_size, dat->base, dat->d_m, d_p, _dummy, dat->type, dat->name);
+
   /*
-   * Using memcpy, copy the ops_dat->data into the new ops_dat->data, one
-   * element at a time. The indices are important, as we want to ignore the
-   * halos, I think.
+   * `position` is the index where we are writing data to in the new dataset.
+   * It has to start at the first element in the new dataset, ignoring the first
+   * set of halo cells.
    */
-  size_t position = 0;
-  for (int i = 0; i < OPS_MAX_DIM; ++i) {
-    for (int j = 0; j < dat->size[i]; j += stride) {
-      const size_t index_old = j * dat->elem_size;
+  size_t position = abs(dat->d_m[0]);
+  for (size_t i = 0; i < (size_t)dat->dim; ++i) {
+    /*
+     * Start is the first element after the "negative" halos and stop is, or
+     * should, be the last element before the "positive" halos
+     */
+    const size_t start = abs(dat->d_m[i]);
+    const size_t stop = dat->size[i] + start;
+
+    /*
+     * Copies one element at a time from one char* to another char*, hence why
+     * there is a memcpy rather than straight up assignment. `position` is used
+     * to track the index into the strided dataset. Note that the index variable
+     * is incremented by stride.
+     */
+    for (size_t j = start; j < stop; j += stride) {
+      const size_t index_dat = j * dat->elem_size;
       const size_t index_new = position * dat->elem_size;
-      memcpy(&new_dat->data[index_new], &dat->data[index_old], dat->elem_size);
-      position += 1;
+      memcpy(new_dat->data + index_new, dat->data + index_dat, dat->elem_size);
+      position++;
+    }
+    /*
+     * Increment `position` so we don't write to space reserved for halos and
+     * memory padding
+     */
+    if (i < (size_t)dat->dim - 1) {
+      position += abs(dat->d_m[i + 1]) + dat->d_p[i];
     }
   }
 
