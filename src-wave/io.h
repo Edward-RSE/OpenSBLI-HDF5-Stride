@@ -1,19 +1,3 @@
-FILE *_debugfp;
-
-void _debug_init(const char *name) {
-  char fn[80];
-  snprintf(fn, 80, "_debug/%s.txt", name);
-  _debugfp = fopen(fn, "w");
-}
-
-void _debug_close(void) { fclose(_debugfp); }
-
-void _debug_fprint(const char *element) {
-  double value = -1;
-  memcpy(&value, element, sizeof(double));
-  fprintf(_debugfp, "%e\n", value);
-}
-
 /*
  * Writes constants to the HDF5
  */
