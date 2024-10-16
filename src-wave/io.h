@@ -30,9 +30,6 @@ ops_dat take_strided_slice(ops_dat dat, size_t stride) {
      * generation the size of the block
      */
     new_size[i] = (dat->size[i] + dat->d_m[i] - dat->d_p[i]) / stride;
-    }
-  }
-  for (int i = 0; i < OPS_MAX_DIM; ++i) {
     d_p[i] = dat->d_p[i] - dat->x_pad;
   }
 
@@ -86,7 +83,8 @@ ops_dat take_strided_slice(ops_dat dat, size_t stride) {
 /*
  * Main steering function for strided HDF5 output
  */
-void hdf5_strided(ops_block &block, ops_dat &phi_B0, ops_dat &x0_B0, int stride, int hdf5_timing) {
+void HDF5_IO_Write_Strided_0_opensbliblock00(ops_block &block, ops_dat &phi_B0, ops_dat &x0_B0, int stride,
+                                             int hdf5_timing) {
   char name[80] = "opensbli_output-strided.h5";
 
   double cpu_start0, elapsed_start0;
@@ -95,8 +93,8 @@ void hdf5_strided(ops_block &block, ops_dat &phi_B0, ops_dat &x0_B0, int stride,
   }
 
   // Taking strided slice of each ops_dat dataset
-  ops_dat phi_B0_strided = take_strided_slice(phi_B0, stride);
   ops_dat x0_B0_strided = take_strided_slice(x0_B0, stride);
+  ops_dat phi_B0_strided = take_strided_slice(phi_B0, stride);
 
   // Writing OPS datasets
   ops_fetch_block_hdf5_file(block, name);
@@ -111,6 +109,31 @@ void hdf5_strided(ops_block &block, ops_dat &phi_B0, ops_dat &x0_B0, int stride,
     ops_timers(&cpu_end0, &elapsed_end0);
     ops_printf("-----------------------------------------\n");
     ops_printf("Time to write HDF5 file: %s: %lf\n", name, elapsed_end0 - elapsed_start0);
+    ops_printf("-----------------------------------------\n");
+  }
+}
+
+/*
+ * Original steering function for outputting HDF5 data
+ */
+void HDF5_IO_Write_0_opensbliblock00(ops_block &opensbliblock00, ops_dat &phi_B0, ops_dat &x0_B0, int HDF5_timing) {
+  double cpu_start0, elapsed_start0;
+  if (HDF5_timing == 1) {
+    ops_timers(&cpu_start0, &elapsed_start0);
+  }
+  // Writing OPS datasets
+  char name0[80];
+  sprintf(name0, "opensbli_output.h5");
+  ops_fetch_block_hdf5_file(opensbliblock00, name0);
+  ops_fetch_dat_hdf5_file(phi_B0, name0);
+  ops_fetch_dat_hdf5_file(x0_B0, name0);
+  // Writing simulation constants
+  write_constants(name0);
+  if (HDF5_timing == 1) {
+    double cpu_end0, elapsed_end0;
+    ops_timers(&cpu_end0, &elapsed_end0);
+    ops_printf("-----------------------------------------\n");
+    ops_printf("Time to write HDF5 file: %s: %lf\n", name0, elapsed_end0 - elapsed_start0);
     ops_printf("-----------------------------------------\n");
   }
 }

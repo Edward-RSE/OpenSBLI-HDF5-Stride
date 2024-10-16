@@ -21,17 +21,21 @@ def main(args):
         print(f"Unable to open: {args.new_data}")
         sys.exit(1)
 
+    halo_n = 5
+    halo_p = 5
     fig, ax = pyplot.subplots(1, 1, figsize=(8, 5))
 
-    x = original["opensbliblock00"]["x0_B0"][5:-5]
-    y = original["opensbliblock00"]["phi_B0"][5:-5]
-    print(y)
+    x = original["opensbliblock00"]["x0_B0"] [halo_n:-halo_p]
+    y = original["opensbliblock00"]["phi_B0"][halo_n:-halo_p]
     ax.plot(x, y, label="Original")
+    print(x.size, x)
+    print(y.size, y)
 
-    x = new["opensbliblock00"]["x0_B0"][5:-5]
-    y = new["opensbliblock00"]["phi_B0"][5:-5]
-    print(y)
+    x = new["opensbliblock00"]["x0_B0"] [halo_n:-halo_p]
+    y = new["opensbliblock00"]["phi_B0"][halo_n:-halo_p]
     ax.plot(x, y, label="New (strided)")
+    print(x.size, x)
+    print(y.size, y)
 
     ax.set_xlabel("$x$")
     ax.set_ylabel(r"$\phi(x)$")
