@@ -30,7 +30,36 @@
             "externalConsole": false,
             "MIMode": "lldb",
             "preLaunchTask": "Build wave",
-            "postDebugTask": "Clean up build"
+        },
+        {
+            "name": "Debug: taylorgreen_seq",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/src-taylor-green/build/taylorgreen_seq",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/src-taylor-green",
+            "environment": [
+                {
+                    "name": "CC",
+                    "value": "/opt/homebrew/bin/gcc-14"
+                },
+                {
+                    "name": "CXX",
+                    "value": "/opt/homebrew/bin/g++-14"
+                },
+                {
+                    "name": "OMPI_CC",
+                    "value": "/opt/homebrew/bin/gcc-14"
+                },
+                {
+                    "name": "OMPI_CXX",
+                    "value": "/opt/homebrew/bin/g++-14"
+                }
+            ],
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "preLaunchTask": "Build taylorgreen",
         }
     ]
 }

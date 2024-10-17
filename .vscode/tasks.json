@@ -16,6 +16,14 @@
             "options": {
                 "cwd": "${workspaceFolder}/src-wave"
             }
+        },
+        {
+            "label": "Build taylorgreen",
+            "type": "shell",
+            "command": "./build.sh",
+            "options": {
+                "cwd": "${workspaceFolder}/src-taylor-green"
+            }
         }
     ]
 }
