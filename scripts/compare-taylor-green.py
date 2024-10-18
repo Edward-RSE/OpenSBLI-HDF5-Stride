@@ -35,7 +35,7 @@ def main(args):
 
     print(rho_old.shape, rho_new.shape)
 
-    rho_old=rho_old[:,:,0]
+    rho_old=rho_old[::2,::2,0]
     rho_new=rho_new[:,:,0]
     diff=rho_new-rho_old
     print(rho_old)
@@ -43,26 +43,7 @@ def main(args):
     print(diff)
 
     ax.imshow(diff)
-
-    # X, Y, Z = numpy.mgrid[0:rho.shape[0], 0:rho.shape[1], 0:rho.shape[2]]
-
-    # fig = go.Figure(data=go.Volume(
-    #     x=X.flatten(),
-    #     y=Y.flatten(),
-    #     z=Z.flatten(),
-    #     value=rho.flatten(),
-    #     opacity=0.8,
-    #     surface_count=15,
-    #     colorscale='viridis',
-    #     caps=dict(x_show=False, y_show=False, z_show=False)  # Hide end-caps
-    # ))
-
     pyplot.show()
-
-    # ax.set_xlabel("$x$")
-    # ax.set_ylabel(r"$\phi(x)$")
-    # ax.legend(loc="upper right")
-    # pyplot.show()
 
     return fig, ax
 

@@ -4,7 +4,6 @@
  * significantly simplifies copying data between buffers.
  */
 ops_dat create_strided_ops_dat(ops_dat dat, size_t stride_i) {
-
   int d_p[] = {0};
   int d_m[] = {0};
   int new_size[] = {(int)ceil(block0np0 / stride_i)};

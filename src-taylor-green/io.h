@@ -85,9 +85,9 @@ void HDF5_IO_Write_Strided_0_opensbliblock00(ops_block &opensbliblock00, ops_dat
   char name0[80];
   sprintf(name0, "opensbli_output-strided.h5");
 
-  const size_t stride_i = 1;
-  const size_t stride_j = 1;
-  const size_t stride_k = 1;
+  const size_t stride_i = 2;
+  const size_t stride_j = 2;
+  const size_t stride_k = 2;
   ops_dat rho_B0_strided = create_strided_ops_dat(rho_B0, stride_i, stride_j, stride_k);
   ops_dat rhou0_B0_strided = create_strided_ops_dat(rhou0_B0, stride_i, stride_j, stride_k);
   ops_dat rhou1_B0_strided = create_strided_ops_dat(rhou1_B0, stride_i, stride_j, stride_k);
