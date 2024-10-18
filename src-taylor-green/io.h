@@ -85,12 +85,14 @@ void HDF5_IO_Write_Strided_0_opensbliblock00(ops_block &opensbliblock00, ops_dat
   char name0[80];
   sprintf(name0, "opensbli_output-strided.h5");
 
-  int stride = 1;
-  ops_dat rho_B0_strided = create_strided_ops_dat(rho_B0, stride);
-  ops_dat rhou0_B0_strided = create_strided_ops_dat(rhou0_B0, stride);
-  ops_dat rhou1_B0_strided = create_strided_ops_dat(rhou1_B0, stride);
-  ops_dat rhou2_B0_strided = create_strided_ops_dat(rhou2_B0, stride);
-  ops_dat rhoE_B0_strided = create_strided_ops_dat(rhoE_B0, stride);
+  const size_t stride_i = 1;
+  const size_t stride_j = 1;
+  const size_t stride_k = 1;
+  ops_dat rho_B0_strided = create_strided_ops_dat(rho_B0, stride_i, stride_j, stride_k);
+  ops_dat rhou0_B0_strided = create_strided_ops_dat(rhou0_B0, stride_i, stride_j, stride_k);
+  ops_dat rhou1_B0_strided = create_strided_ops_dat(rhou1_B0, stride_i, stride_j, stride_k);
+  ops_dat rhou2_B0_strided = create_strided_ops_dat(rhou2_B0, stride_i, stride_j, stride_k);
+  ops_dat rhoE_B0_strided = create_strided_ops_dat(rhoE_B0, stride_i, stride_j, stride_k);
 
   ops_fetch_block_hdf5_file(opensbliblock00, name0);
   ops_fetch_dat_hdf5_file(rho_B0_strided, name0);
