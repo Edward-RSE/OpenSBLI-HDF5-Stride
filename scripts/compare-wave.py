@@ -31,8 +31,8 @@ def main(args):
     print(x.size, x)
     print(y.size, y)
 
-    x = new["opensbliblock00"]["x0_B0"] [halo_n:-halo_p]
-    y = new["opensbliblock00"]["phi_B0"][halo_n:-halo_p]
+    x = new["opensbliblock00"]["x0_B0"][:]
+    y = new["opensbliblock00"]["phi_B0"][:]
     ax.plot(x, y, label="New (strided)")
     print(x.size, x)
     print(y.size, y)
