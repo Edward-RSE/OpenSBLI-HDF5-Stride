@@ -8,7 +8,7 @@ size_t index2d(size_t i, size_t j, int *size) { return i + j * size[0]; }
  * In this example, we create a new ops_dat without any halo cells, which
  * significantly simplifies copying data between buffers.
  */
-ops_dat create_strided_ops_dat(ops_dat dat, size_t stride_i, size_t stride_j, ) {
+ops_dat create_strided_ops_dat(ops_dat dat, size_t stride_i, size_t stride_j) {
   int d_p[] = {0, 0};
   int d_m[] = {0, 0};
   int new_size[] = {(int)ceil(block0np0 / stride_i), (int)ceil(block0np1 / stride_j)};
