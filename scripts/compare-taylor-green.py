@@ -30,7 +30,8 @@ def main(args):
     fig, ax = pyplot.subplots(1, 1, figsize=(8, 5))
 
     rho_old = numpy.array(original["opensbliblock00"]["rho_B0"][halo_n:-halo_p, halo_n:-halo_p, halo_n:-halo_p])
-    rho_new = numpy.array(new["opensbliblock00"]["rho_B0"][halo_n:-halo_p, halo_n:-halo_p, halo_n:-halo_p])
+    # rho_new = numpy.array(new["opensbliblock00"]["rho_B0"][halo_n:-halo_p, halo_n:-halo_p, halo_n:-halo_p])
+    rho_new = numpy.array(new["opensbliblock00"]["rho_B0"])
 
     print(rho_old.shape, rho_new.shape)
 

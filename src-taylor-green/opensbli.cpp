@@ -15,24 +15,24 @@ int main(int argc, char **argv) {
   // Set restart to 1 to restart the simulation from HDF5 file
   restart = 0;
   // User defined constant values
-  block0np0 = 4;
-  block0np1 = 4;
-  block0np2 = 4;
+  block0np0 = 64;
+  block0np1 = 64;
+  block0np2 = 64;
   Delta0block0 = 2 * M_PI / block0np0;
   Delta1block0 = 2 * M_PI / block0np1;
   Delta2block0 = 2 * M_PI / block0np2;
-  niter = 1;
+  niter = 10;
   double rkB[] = {(1.0 / 3.0), (15.0 / 16.0), (8.0 / 15.0)};
   double rkA[] = {0, (-5.0 / 9.0), (-153.0 / 128.0)};
   dt = 0.003385;
-  write_output_file = 50;
+  write_output_file = 10000;
   HDF5_timing = 0;
   filter_frequency = 25;
   DRP_filt = 0.200000000000000;
   Minf = 0.1;
   gama = 1.4;
-  Re = 1600.0;
   Pr = 0.71;
+  Re = 1600.0;
   inv2Delta0block0 = 1.0 / (Delta0block0 * Delta0block0);
   inv2Delta1block0 = 1.0 / (Delta1block0 * Delta1block0);
   inv2Delta2block0 = 1.0 / (Delta2block0 * Delta2block0);
@@ -418,6 +418,7 @@ int main(int argc, char **argv) {
   ops_printf("-----------------------------------------\n");
   ops_printf("Total Wall time %lf\n", elapsed_end0 - elapsed_start0);
 
+  HDF5_IO_Write_0_opensbliblock00(opensbliblock00, rho_B0, rhou0_B0, rhou1_B0, rhou2_B0, rhoE_B0, HDF5_timing);
   HDF5_IO_Write_Strided_0_opensbliblock00(opensbliblock00, rho_B0, rhou0_B0, rhou1_B0, rhou2_B0, rhoE_B0, HDF5_timing);
   ops_timing_output(std::cout);
   fclose(f0);

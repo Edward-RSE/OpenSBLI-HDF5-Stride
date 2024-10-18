@@ -10,10 +10,10 @@ simulation_parameters = {
 'Minf'      :   '0.1',
 'Pr'        :   '0.71',
 'dt'        :   '0.003385',
-'niter'     :   '1',
-'block0np0'     :   '4',
-'block0np1'     :   '4',
-'block0np2'     :   '4',
+'niter'     :   '10',
+'block0np0'     :   '64',
+'block0np1'     :   '64',
+'block0np2'     :   '64',
 'Delta0block0'      :   '2*M_PI/block0np0',
 'Delta1block0'      :   '2*M_PI/block0np1',
 'Delta2block0'      :   '2*M_PI/block0np2',
@@ -132,7 +132,7 @@ for direction in range(ndim):
 block.set_block_boundaries(boundaries)
 # set the IO class to write out arrays
 kwargs = {'iotype': "Write"}
-h5 = iohdf5(save_every=50, **kwargs)
+h5 = iohdf5(save_every=10000, **kwargs)
 h5.add_arrays(simulation_eq.time_advance_arrays)
 block.setio(copy.deepcopy(h5))
 # set the equations to be solved on the block
