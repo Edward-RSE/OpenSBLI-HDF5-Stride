@@ -13,5 +13,3 @@ cp ../include/io_strided1d.h io_strided.h && \
 
 cmake .. -DOPS_INSTALL_DIR=$OPS_INSTALL_DIR -DCMAKE_BUILD_TYPE=Debug -DHDF5_ROOT=$HDF5_INSTALL_DIR
 cmake --build . -j
-
-rm ../io_strided.h

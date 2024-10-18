@@ -22,8 +22,7 @@ void HDF5_IO_Write_0_opensbliblock00(ops_block &opensbliblock00, ops_dat &phi_B0
     ops_timers(&cpu_start0, &elapsed_start0);
   }
   // Writing OPS datasets
-  char name0[80];
-  sprintf(name0, "opensbli_output.h5");
+  char name0[80] = "opensbli_output.h5";
   ops_fetch_block_hdf5_file(opensbliblock00, name0);
   ops_fetch_dat_hdf5_file(phi_B0, name0);
   ops_fetch_dat_hdf5_file(x0_B0, name0);
@@ -53,7 +52,7 @@ void HDF5_IO_Write_Strided_0_opensbliblock00(ops_block &block, ops_dat &phi_B0, 
   }
 
   // Taking strided slice of each ops_dat dataset
-  const size_t stride_i = 1;
+  const size_t stride_i = 10;
   ops_dat x0_B0_strided = create_strided_ops_dat(x0_B0, stride_i);
   ops_dat phi_B0_strided = create_strided_ops_dat(phi_B0, stride_i);
 
