@@ -53,8 +53,8 @@ void HDF5_IO_Write_Strided_0_opensbliblock00(ops_block &block, ops_dat &phi_B0, 
 
   // Taking strided slice of each ops_dat dataset
   const size_t stride_i = 10;
-  ops_dat x0_B0_strided = create_strided_ops_dat(x0_B0, stride_i);
-  ops_dat phi_B0_strided = create_strided_ops_dat(phi_B0, stride_i);
+  ops_dat x0_B0_strided = create_strided_ops_dat_with_halo_cells(x0_B0, stride_i);
+  ops_dat phi_B0_strided = create_strided_ops_dat_with_halo_cells(phi_B0, stride_i);
 
   // Writing OPS datasets
   ops_fetch_block_hdf5_file(block, name);
