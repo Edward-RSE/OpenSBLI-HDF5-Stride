@@ -310,3 +310,4 @@ cython_debug/
 *.h5
 latex_output
 **/_debug
+**/_fig
