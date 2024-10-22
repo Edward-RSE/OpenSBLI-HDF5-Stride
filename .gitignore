@@ -311,3 +311,4 @@ cython_debug/
 latex_output
 **/_debug
 **/_fig
+*.DS_Store
