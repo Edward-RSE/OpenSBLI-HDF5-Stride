@@ -121,3 +121,49 @@ void HDF5_IO_Write_Strided_0_opensbliblock00(ops_block &opensbliblock00, ops_dat
     ops_printf("-----------------------------------------\n");
   }
 }
+
+void HDF5_IO_Write_Strided_Single_Precision_0_opensbliblock00(ops_block &opensbliblock00, ops_dat &rho_B0,
+                                                              ops_dat &rhou0_B0, ops_dat &rhou1_B0, ops_dat &rhou2_B0,
+                                                              ops_dat &rhoE_B0, int HDF5_timing) {
+  double cpu_start0, elapsed_start0;
+  if (HDF5_timing == 1) {
+    ops_timers(&cpu_start0, &elapsed_start0);
+  }
+
+  // Writing OPS datasets
+  char name0[80];
+  sprintf(name0, "opensbli_output-strided-single-precision.h5");
+
+  const size_t stride_i = 2;
+  const size_t stride_j = 2;
+  const size_t stride_k = 2;
+
+  ops_dat rho_B0_strided =
+      create_strided_ops_dat_with_halo_cells_single_precision(rho_B0, stride_i, stride_j, stride_k);
+  ops_dat rhou0_B0_strided =
+      create_strided_ops_dat_with_halo_cells_single_precision(rhou0_B0, stride_i, stride_j, stride_k);
+  ops_dat rhou1_B0_strided =
+      create_strided_ops_dat_with_halo_cells_single_precision(rhou1_B0, stride_i, stride_j, stride_k);
+  ops_dat rhou2_B0_strided =
+      create_strided_ops_dat_with_halo_cells_single_precision(rhou2_B0, stride_i, stride_j, stride_k);
+  ops_dat rhoE_B0_strided =
+      create_strided_ops_dat_with_halo_cells_single_precision(rhoE_B0, stride_i, stride_j, stride_k);
+
+  ops_fetch_block_hdf5_file(opensbliblock00, name0);
+  ops_fetch_dat_hdf5_file(rho_B0_strided, name0);
+  ops_fetch_dat_hdf5_file(rhou0_B0_strided, name0);
+  ops_fetch_dat_hdf5_file(rhou1_B0_strided, name0);
+  ops_fetch_dat_hdf5_file(rhou2_B0_strided, name0);
+  ops_fetch_dat_hdf5_file(rhoE_B0_strided, name0);
+
+  // Writing simulation constants
+  write_constants(name0);
+
+  if (HDF5_timing == 1) {
+    double cpu_end0, elapsed_end0;
+    ops_timers(&cpu_end0, &elapsed_end0);
+    ops_printf("-----------------------------------------\n");
+    ops_printf("Time to write HDF5 file: %s: %lf\n", name0, elapsed_end0 - elapsed_start0);
+    ops_printf("-----------------------------------------\n");
+  }
+}

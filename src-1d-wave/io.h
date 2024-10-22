@@ -72,3 +72,34 @@ void HDF5_IO_Write_Strided_0_opensbliblock00(ops_block &block, ops_dat &phi_B0, 
     ops_printf("-----------------------------------------\n");
   }
 }
+
+void HDF5_IO_Write_Strided_Single_Precision_0_opensbliblock00(ops_block &block, ops_dat &phi_B0, ops_dat &x0_B0,
+                                                              int hdf5_timing) {
+  char name[80] = "opensbli_output-strided-single-precision.h5";
+
+  double cpu_start0, elapsed_start0;
+  if (hdf5_timing == 1) {
+    ops_timers(&cpu_start0, &elapsed_start0);
+  }
+
+  // Taking strided slice of each ops_dat dataset
+  const size_t stride_i = 10;
+  ops_dat x0_B0_strided = create_strided_ops_dat_with_halo_cells_single_precision(x0_B0, stride_i);
+  ops_dat phi_B0_strided = create_strided_ops_dat_with_halo_cells_single_precision(phi_B0, stride_i);
+
+  // Writing OPS datasets
+  ops_fetch_block_hdf5_file(block, name);
+  ops_fetch_dat_hdf5_file(x0_B0_strided, name);
+  ops_fetch_dat_hdf5_file(phi_B0_strided, name);
+
+  // Writing simulation constants
+  write_constants(name);
+
+  if (hdf5_timing == 1) {
+    double cpu_end0, elapsed_end0;
+    ops_timers(&cpu_end0, &elapsed_end0);
+    ops_printf("-----------------------------------------\n");
+    ops_printf("Time to write HDF5 file: %s: %lf\n", name, elapsed_end0 - elapsed_start0);
+    ops_printf("-----------------------------------------\n");
+  }
+}

@@ -128,6 +128,7 @@ int main(int argc, char **argv) {
 
   HDF5_IO_Write_0_opensbliblock00(opensbliblock00, phi_B0, x0_B0, HDF5_timing);
   HDF5_IO_Write_Strided_0_opensbliblock00(opensbliblock00, phi_B0, x0_B0, HDF5_timing);
+  HDF5_IO_Write_Strided_Single_Precision_0_opensbliblock00(opensbliblock00, phi_B0, x0_B0, HDF5_timing);
 
   ops_exit();
 }

@@ -420,6 +420,8 @@ int main(int argc, char **argv) {
 
   HDF5_IO_Write_0_opensbliblock00(opensbliblock00, rho_B0, rhou0_B0, rhou1_B0, rhou2_B0, rhoE_B0, HDF5_timing);
   HDF5_IO_Write_Strided_0_opensbliblock00(opensbliblock00, rho_B0, rhou0_B0, rhou1_B0, rhou2_B0, rhoE_B0, HDF5_timing);
+  HDF5_IO_Write_Strided_Single_Precision_0_opensbliblock00(opensbliblock00, rho_B0, rhou0_B0, rhou1_B0, rhou2_B0,
+                                                           rhoE_B0, HDF5_timing);
   ops_timing_output(std::cout);
   fclose(f0);
   ops_exit();

@@ -4,6 +4,7 @@ simulation.
 
 import argparse
 import sys
+from pathlib import Path
 
 import h5py
 import numpy
@@ -21,6 +22,7 @@ def main(args):
     except IOError:
         print(f"Unable to open: {args.new_data}")
         sys.exit(1)
+    strided_name = Path(args.new_data).stem
 
     halo_n = 5
     halo_p = 5
@@ -55,8 +57,10 @@ def main(args):
     for i in range(rho_original.shape[2]):
         fig, ax = pyplot.subplots(1, 1, figsize=(8, 5))
         diff = rho_diff[:, :, i]
-        ax.imshow(diff)
-        pyplot.savefig("_fig/taylor-green-" + str(i) + ".png")
+        im = ax.imshow(diff)
+        _cbar = fig.colorbar(im, ax=ax)
+        ax.set_title("Absolute difference")
+        pyplot.savefig(f"_fig/{strided_name}-taylor-green-" + str(i) + ".png")
         pyplot.close()
         if numpy.sum(diff) != 0:
             print(i, diff)
