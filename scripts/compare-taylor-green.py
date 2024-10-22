@@ -30,13 +30,16 @@ def main(args):
         ]
     )
 
-    halo_n_new = int(args.halo_size)
-    halo_p_new = int(args.halo_size)
-    rho_strided = numpy.array(
-        strided_dat["opensbliblock00"]["rho_B0"][
-            halo_n_new:-halo_p_new, halo_n_new:-halo_p_new, halo_n_new:-halo_p_new
-        ]
-    )
+    if args.halo_size == 0:
+        rho_strided = numpy.array(strided_dat["opensbliblock00"]["rho_B0"][:, :, :])
+    else:
+        halo_n_new = int(args.halo_size)
+        halo_p_new = int(args.halo_size)
+        rho_strided = numpy.array(
+            strided_dat["opensbliblock00"]["rho_B0"][
+                halo_n_new:-halo_p_new, halo_n_new:-halo_p_new, halo_n_new:-halo_p_new
+            ]
+        )
 
     stride_i = int(args.stride_i)
     stride_j = int(args.stride_j)
@@ -53,7 +56,7 @@ def main(args):
         fig, ax = pyplot.subplots(1, 1, figsize=(8, 5))
         diff = rho_diff[:, :, i]
         ax.imshow(diff)
-        pyplot.savefig("_fig/taylor-green-halo-" + str(i) + ".png")
+        pyplot.savefig("_fig/taylor-green-" + str(i) + ".png")
         pyplot.close()
         if numpy.sum(diff) != 0:
             print(i, diff)
@@ -66,6 +69,6 @@ if __name__ == "__main__":
     ap.add_argument("stride_i", default=1, type=int)
     ap.add_argument("stride_j", default=1, type=int)
     ap.add_argument("stride_k", default=1, type=int)
-    ap.add_argument("--halo_size", default=5, type=int)
+    ap.add_argument("--halo_size", default=0, type=int)
     args = ap.parse_args()
     main(args)
