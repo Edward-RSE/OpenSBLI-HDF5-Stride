@@ -5,10 +5,10 @@
             "name": "Debug: wave_seq",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/src-wave/build/wave_seq",
+            "program": "${workspaceFolder}/src-1d-wave/build/wave_seq",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}/src-wave",
+            "cwd": "${workspaceFolder}/src-1d-wave",
             "environment": [
                 {
                     "name": "CC",
@@ -35,10 +35,10 @@
             "name": "Debug: taylorgreen_seq",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/src-taylor-green/build/taylorgreen_seq",
+            "program": "${workspaceFolder}/src-2d-taylor-green/build/taylorgreen_seq",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}/src-taylor-green",
+            "cwd": "${workspaceFolder}/src-2d-taylor-green",
             "environment": [
                 {
                     "name": "CC",
