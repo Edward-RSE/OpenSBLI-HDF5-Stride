@@ -8,10 +8,8 @@ export OMPI_CXX=$CXX
 OPS_INSTALL_DIR="$HOME/srsg-projects/opensbli/OPS-INSTALL-DEBUG"
 HDF5_INSTALL_DIR="$HOME/srsg-projects/opensbli/HDF5"
 
-cp ../include/io_strided1d.h io_strided.h && \
-    cp ../include/io_strided_util.h io_strided_util.h || { echo "Failed to copy header files"; exit; }
-
-rm -rf build && mkdir build && cd build || { echo "Failed to initialise build directory"; exit; }
+cp ../include/io_strided3d.h io_strided.h && \
+    rm -rf build && mkdir build && cd build || { echo "Failed to initialise build directory"; exit; }
 
 cmake .. -DOPS_INSTALL_DIR=$OPS_INSTALL_DIR -DCMAKE_BUILD_TYPE=Debug -DHDF5_ROOT=$HDF5_INSTALL_DIR
 cmake --build . -j
