@@ -703,8 +703,9 @@ int main(int argc, char **argv) {
     if (fmod(1 + iter, write_slices) == 0) {
       char slice_name0[80];
       sprintf(slice_name0, "%d", iter + 1);
-      ops_write_plane_group_hdf5({{2, block0np2 / 2}}, slice_name0,
-                                 {{rho_B0, rhou0_B0, rhou1_B0, rhou2_B0, rhoE_B0, WENO_filter_B0}});
+      //       ops_write_plane_group_hdf5({{2, block0np2 / 2}}, slice_name0,
+      //                                  {{rho_B0, rhou0_B0, rhou1_B0, rhou2_B0, rhoE_B0, WENO_filter_B0}});
+      ops_write_plane_group_strided(slice_name0, rho_B0, rhou0_B0, rhou1_B0, rhou2_B0, rhoE_B0, WENO_filter_B0);
     }
 
     if (fmod(1 + iter, write_slices) == 0) {
