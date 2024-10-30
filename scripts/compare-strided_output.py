@@ -8,7 +8,6 @@ from pathlib import Path
 
 import h5py
 import numpy
-from IPython import embed
 from matplotlib import pyplot
 
 
@@ -24,46 +23,39 @@ def main(args):
         print(f"Unable to open: {args.new_data}")
         sys.exit(1)
 
+    variable = "rho_B0"
+    block0np2 = 256
     halo_n = 5
     halo_p = 5
-    rho_original = numpy.array(
-        original_dat["opensbliblock00"]["rho_B0"][
+
+    original_dat_path = Path(args.original_data)
+    original_dat_iter = int(original_dat_path.stem.split("_")[-1])
+    variable_original = numpy.array(
+        original_dat["opensbliblock00"][variable][
             halo_n:-halo_p, halo_n:-halo_p, halo_n:-halo_p
         ]
     )
-
-    original_dat_path = Path(args.original_data)
-    dat_iter = int(original_dat_path.stem.split("_")[-1])
-    rho_strided = numpy.array(
-        strided_dat["opensbliblock00"][f"{dat_iter}"]["rho_B0"][:, :]
+    variable_strided = numpy.array(
+        strided_dat["opensbliblock00"][f"{original_dat_iter}"][variable][:, :]
     )
 
-    block0np2 = 64
-    # slice_index = int((block0np2 / args.stride_k) / 2)
-    slice_index = int(block0np2 / 2)
-    rho_original_slice = rho_original[:, :, slice_index]
-    rho_original_slice_strided = rho_original_slice[:: args.stride_i, :: args.stride_j]
-
-    print(slice_index)
-    print(rho_strided.shape, rho_original_slice_strided.shape)
-
-    diff = rho_original_slice_strided - rho_strided
+    slice_index = int((block0np2) / 2)
+    variable_original_slice = variable_original[slice_index, :, :]
+    variable_original_slice = variable_original_slice[
+        :: args.stride_j, :: args.stride_k
+    ]
+    diff = variable_original_slice - variable_strided
 
     fig, ax = pyplot.subplots(1, 3, figsize=(12, 5))
-
-    im0 = ax[0].imshow(rho_original_slice_strided)
-    im1 = ax[1].imshow(rho_strided)
-    im2 = ax[2].imshow(diff)
-
-    # fig.colorbar(im0, ax=ax[0])
-    # fig.colorbar(im1, ax=ax[1])
-    # fig.colorbar(im2, ax=ax[2])
-
-    ax[0].set_title("Original [manually sliced and strided]")
+    ax[0].imshow(variable_original_slice)
+    ax[1].imshow(variable_strided)
+    ax[2].imshow(diff)
+    ax[0].set_title("Original")
     ax[1].set_title("Strided [slice with striding]")
     ax[2].set_title("Absolute difference")
-
+    fig.suptitle(f"Slice index: {slice_index}")
     fig.tight_layout()
+
     pyplot.show()
 
 
