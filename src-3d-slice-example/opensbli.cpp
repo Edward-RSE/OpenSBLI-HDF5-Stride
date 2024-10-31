@@ -45,7 +45,7 @@ inv_rfact2_block0 = 1.0/Delta2block0;
 inv_rfact1_block0 = 1.0/Delta1block0;
 filter_frequency = 25;
 DRP_filt = 0.100000000000000;
-HDF5_timing = 0;
+HDF5_timing = 1;
 write_output_file = 500;
 write_slices = 500;
 inv2Delta0block0 = 1.0/(Delta0block0*Delta0block0);
@@ -714,14 +714,14 @@ HDF5_IO_Write_1_opensbliblock00_dynamic(opensbliblock00, iter, rho_B0, rhou0_B0,
 if (fmod(1 + iter,write_slices) == 0){
 char slice_name0[80];
 sprintf(slice_name0, "%d", iter + 1);
-double cpu_start0, elapsed_start0;
-double cpu_end0, elapsed_end0;
-ops_timers(&cpu_start0, &elapsed_start0);
-ops_write_plane_group_hdf5({{2, block0np2/2}}, slice_name0, {{rho_B0, rhou0_B0, rhou1_B0, rhou2_B0, rhoE_B0, WENO_filter_B0}});
-ops_timers(&cpu_end0, &elapsed_end0);
-ops_printf("-----------------------------------------\n");
-ops_printf("Time to write sliced HDF5 file: %lf\n", elapsed_end0 - elapsed_start0);
-ops_printf("-----------------------------------------\n");
+//double cpu_start0, elapsed_start0;
+//double cpu_end0, elapsed_end0;
+//ops_timers(&cpu_start0, &elapsed_start0);
+//ops_write_plane_group_hdf5({{2, block0np2/2}}, slice_name0, {{rho_B0, rhou0_B0, rhou1_B0, rhou2_B0, rhoE_B0, WENO_filter_B0}});
+//ops_timers(&cpu_end0, &elapsed_end0);
+//ops_printf("-----------------------------------------\n");
+//ops_printf("Time to write sliced HDF5 file: %lf\n", elapsed_end0 - elapsed_start0);
+//ops_printf("-----------------------------------------\n");
 ops_write_plane_group_strided(slice_name0, rho_B0, rhou0_B0, rhou1_B0, rhou2_B0, rhoE_B0, WENO_filter_B0);
 }
 
