@@ -163,7 +163,7 @@ void ops_write_plane_group_strided(char *slice_name0, ops_dat rho_B0, ops_dat rh
 
   const int stride_i = 2;
   const int stride_j = 2;
-  const int stride_k = 2;
+  const int stride_k = 1;
 
   ops_dat rho_B0_strided = create_strided_ops_dat_with_halo_cells(rho_B0, stride_i, stride_j, stride_k);
   ops_dat rhou0_B0_strided = create_strided_ops_dat_with_halo_cells(rhou0_B0, stride_i, stride_j, stride_k);
