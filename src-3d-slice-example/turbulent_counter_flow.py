@@ -15,13 +15,13 @@ simulation_parameters = {
     "Minf": "0.4",
     "Pr": "0.7",
     "dt": "0.0001",
-    "niter": "10",
-    "block0np0": "64",
-    "block0np1": "64",
-    "block0np2": "64",
-    # "block0np0": "360",
-    # "block0np1": "355",
-    # "block0np2": "300",
+    "niter": "1000",
+    # "block0np0": "64",
+    # "block0np1": "64",
+    # "block0np2": "64",
+    "block0np0": "360",
+    "block0np1": "355",
+    "block0np2": "300",
     "Delta0block0": "6.0/block0np0",
     "Delta1block0": "2.0/(block0np1-1)",
     "Delta2block0": "3.0/block0np2",
@@ -390,7 +390,7 @@ block.set_equations(stat_equation_classes)
 # STEP 4 add io for the block
 kwargs = {"iotype": "Write"}
 output_arrays = simulation_eq.time_advance_arrays + [x, y, z, DataObject("D11")]
-output_hdf5 = iohdf5(arrays=output_arrays, save_every=5, **kwargs)
+output_hdf5 = iohdf5(arrays=output_arrays, save_every=500, **kwargs)
 block.setio([output_hdf5])
 try:
     block.setio([stats_hdf5])
@@ -403,7 +403,7 @@ grid_slice_hdf5_side = iohdf5_slices(blocknumber=0, **{"iotype": "Init"})
 coords = [([DataObject("x0"), DataObject("x1")], 2, "block0np2/2")]
 grid_slice_hdf5_side.add_slices(coords)
 # Q vector slices written out in time
-slices_hdf5_side = iohdf5_slices(save_every=5, blocknumber=0, **{"iotype": "Write"})
+slices_hdf5_side = iohdf5_slices(save_every=500, blocknumber=0, **{"iotype": "Write"})
 # x-y side view
 if not weno and not teno and not TVD:
     slice_arrays = [
@@ -421,7 +421,7 @@ coords = [([DataObject("x0"), DataObject("x2")], 1, 20)]
 coords += [([DataObject("x0"), DataObject("x2")], 1, "block0np1 - 20")]
 grid_slice_hdf5_surfaces.add_slices(coords)
 # Q vector slices written out in time
-slices_hdf5_surfaces = iohdf5_slices(save_every=5, blocknumber=0, **{"iotype": "Write"})
+slices_hdf5_surfaces = iohdf5_slices(save_every=500, blocknumber=0, **{"iotype": "Write"})
 # Wall normal planes
 slices = [(slice_arrays, 1, 20)]
 slices += [(slice_arrays, 1, "block0np1 - 20")]
