@@ -957,4 +957,4 @@
 
     endmacro()
 
-build_ops_c_sample("taylorgreen" "NONE" "NONE" "NONE" "NO" "NO")
+build_ops_c_sample("standalone-example" "NONE" "NONE" "NONE" "NO" "NO")

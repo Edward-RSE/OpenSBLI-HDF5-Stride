@@ -2,11 +2,27 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "Build standalone example",
+            "type": "shell",
+            "command": "./build.sh",
+            "options": {
+                "cwd": "${workspaceFolder}/src-standalone-example"
+            }
+        },
+        {
             "label": "Build slice example",
             "type": "shell",
             "command": "./build.sh",
             "options": {
-                "cwd": "${workspaceFolder}/src-3d-slice-example"
+                "cwd": "${workspaceFolder}/src-slice-example"
+            }
+        },
+        {
+            "label": "Build slab example",
+            "type": "shell",
+            "command": "./build.sh",
+            "options": {
+                "cwd": "${workspaceFolder}/src-slab-example"
             }
         },
 

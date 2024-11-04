@@ -2,7 +2,37 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug: slice-example",
+            "name": "Debug: standalone example",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/src-standalone-example/build/standalone-example_seq",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/src-standalone-example",
+            "environment": [
+                {
+                    "name": "CC",
+                    "value": "/opt/homebrew/bin/gcc-14"
+                },
+                {
+                    "name": "CXX",
+                    "value": "/opt/homebrew/bin/g++-14"
+                },
+                {
+                    "name": "OMPI_CC",
+                    "value": "/opt/homebrew/bin/gcc-14"
+                },
+                {
+                    "name": "OMPI_CXX",
+                    "value": "/opt/homebrew/bin/g++-14"
+                }
+            ],
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "preLaunchTask": "Build standalone example",
+        },
+        {
+            "name": "Debug: slice example",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/src-3d-slice-example/build/slice-example_seq",
@@ -29,7 +59,37 @@
             ],
             "externalConsole": false,
             "MIMode": "lldb",
-        "preLaunchTask": "Build slice example",
-        }
+            "preLaunchTask": "Build slice example",
+        },
+        {
+            "name": "Debug: slab example",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/src-slab-example/build/slab-example_seq",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/src-slab-example",
+            "environment": [
+                {
+                    "name": "CC",
+                    "value": "/opt/homebrew/bin/gcc-14"
+                },
+                {
+                    "name": "CXX",
+                    "value": "/opt/homebrew/bin/g++-14"
+                },
+                {
+                    "name": "OMPI_CC",
+                    "value": "/opt/homebrew/bin/gcc-14"
+                },
+                {
+                    "name": "OMPI_CXX",
+                    "value": "/opt/homebrew/bin/g++-14"
+                }
+            ],
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "preLaunchTask": "Build slab example",
+                }
     ]
 }
