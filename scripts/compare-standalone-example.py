@@ -60,7 +60,8 @@ def main(args):
         im = ax.imshow(diff)
         _cbar = fig.colorbar(im, ax=ax)
         ax.set_title("Absolute difference")
-        pyplot.savefig(f"_fig/{strided_name}-taylor-green-" + str(i) + ".png")
+        path = Path(__file__).parent
+        pyplot.savefig(f"{path}/fig/{strided_name}-taylor-green-" + str(i) + ".png")
         pyplot.close()
         if numpy.sum(diff) != 0:
             print(i, diff)
