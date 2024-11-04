@@ -35,10 +35,10 @@
             "name": "Debug: slice example",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/src-3d-slice-example/build/slice-example_seq",
+            "program": "${workspaceFolder}/src-slice-example/build/slice-example_seq",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}/src-3d-slice-example",
+            "cwd": "${workspaceFolder}/src-slice-example",
             "environment": [
                 {
                     "name": "CC",
