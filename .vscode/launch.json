@@ -2,13 +2,13 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug: wave_seq",
+            "name": "Debug: slice-example",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/src-1d-wave/build/wave_seq",
+            "program": "${workspaceFolder}/src-3d-slice-example/build/slice-example_seq",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}/src-1d-wave",
+            "cwd": "${workspaceFolder}/src-3d-slice-example",
             "environment": [
                 {
                     "name": "CC",
@@ -29,37 +29,7 @@
             ],
             "externalConsole": false,
             "MIMode": "lldb",
-            "preLaunchTask": "Build wave",
-        },
-        {
-            "name": "Debug: taylorgreen_seq",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${workspaceFolder}/src-2d-taylor-green/build/taylorgreen_seq",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}/src-2d-taylor-green",
-            "environment": [
-                {
-                    "name": "CC",
-                    "value": "/opt/homebrew/bin/gcc-14"
-                },
-                {
-                    "name": "CXX",
-                    "value": "/opt/homebrew/bin/g++-14"
-                },
-                {
-                    "name": "OMPI_CC",
-                    "value": "/opt/homebrew/bin/gcc-14"
-                },
-                {
-                    "name": "OMPI_CXX",
-                    "value": "/opt/homebrew/bin/g++-14"
-                }
-            ],
-            "externalConsole": false,
-            "MIMode": "lldb",
-            "preLaunchTask": "Build taylorgreen",
+        "preLaunchTask": "Build slice example",
         }
     ]
 }

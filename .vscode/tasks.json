@@ -2,28 +2,13 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Build wave",
+            "label": "Build slice example",
             "type": "shell",
             "command": "./build.sh",
             "options": {
-                "cwd": "${workspaceFolder}/src-1d-wave"
+                "cwd": "${workspaceFolder}/src-3d-slice-example"
             }
         },
-        {
-            "label": "Build eulerwave",
-            "type": "shell",
-            "command": "./build.sh",
-            "options": {
-                "cwd": "${workspaceFolder}/src-2d-euler-wave"
-            }
-        },
-        {
-            "label": "Build taylorgreen",
-            "type": "shell",
-            "command": "./build.sh",
-            "options": {
-                "cwd": "${workspaceFolder}/src-3d-taylor-green"
-            }
-        }
+
     ]
 }

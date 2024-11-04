@@ -6,6 +6,7 @@ import argparse
 import sys
 from pathlib import Path
 
+from IPython import embed
 import h5py
 import numpy
 from matplotlib import pyplot
@@ -24,7 +25,7 @@ def main(args):
         sys.exit(1)
 
     variable = "rho_B0"
-    block0np2 = 256
+    block0np2 = 150
     halo_n = 5
     halo_p = 5
 
@@ -42,15 +43,17 @@ def main(args):
     slice_index = int((block0np2) / 2)
     variable_original_slice = variable_original[slice_index, :, :]
     variable_original_slice = variable_original_slice[
-        :: args.stride_j, :: args.stride_k
+        :: args.stride_j, :: args.stride_i
     ]
+
     diff = variable_original_slice - variable_strided
 
     fig, ax = pyplot.subplots(1, 3, figsize=(12, 5))
-    ax[0].imshow(variable_original_slice)
+    ax[0].imshow(variable_original[slice_index, :, :])
     ax[1].imshow(variable_strided)
-    ax[2].imshow(diff)
-    ax[0].set_title("Original")
+    im = ax[2].imshow(diff)
+    fig.colorbar(im, ax=ax[2])
+    ax[0].set_title("Original slice")
     ax[1].set_title("Strided [slice with striding]")
     ax[2].set_title("Absolute difference")
     fig.suptitle(f"Slice index: {slice_index}")
