@@ -191,7 +191,7 @@ int main(int argc, char **argv) {
   sprintf(slice_name0, "0");
 
   // ops_write_plane_group_hdf5({{2, block0np2 / 2}}, slice_name0, {{x0_B0, x1_B0}});
-  // ops_write_plane_group_strided_coords(slice_name0, stride, x0_B0, x1_B0);
+  ops_write_plane_group_strided_coords(slice_name0, stride, x0_B0, x1_B0);
 
   // Initialize loop timers
   double cpu_start0, elapsed_start0, cpu_end0, elapsed_end0;

@@ -31,8 +31,6 @@ void declare_empty_strided_ops_dat(ops_block block, int stride[2]) {
    */
   int strided_d_p[] = {0, 0, 0};
   int strided_d_m[] = {0, 0, 0};
-  // int strided_d_p[] = {5, 5, 5};
-  // int strided_d_m[] = {-5, -5, -5};
   int strided_base[] = {0, 0, 0};
   int strided_size[] = {
       (int)ceil(block0np0 / stride[0]),
@@ -76,20 +74,17 @@ void declare_empty_strided_ops_dat(ops_block block, int stride[2]) {
  *        ops_dat.
  *
  * @param[in] dat The ops_dat to create a strided ops_dat from
- * @param[in] stride_i The stride in the i direction
- * @param[in] stride_j The stride in the j direction
- * @param[in] stride_k The stride in the k direction
- *
- * @returns The strided ops_dat
+ * @param[out] strided_dat The strided ops_dat with data copied to it
+ * @param[in] stride The stride in each dimension
  *
  * @details
  *
- * This function creates a strided ops_dat by taking an existing ops_dat and
- * creating a new ops_dat with the specified stride in each dimension. There
- * are no halo cells, because it simplifies copying data between buffers.
+ * This function creates a strided data set by copying data from a ops_dat to
+ * a strided ops_dat (e.g. a ops_dat which is smaller).
  *
  */
 void copy_to_strided_dat(ops_dat original_dat, ops_dat strided_dat, int stride[3]) {
+  ops_get_data(original_dat);
   /*
    * Loop variables to control the start and stop of the loop over each
    * dimension. These values are based on the size of the original dataset. The
@@ -143,13 +138,24 @@ void ops_write_plane_group_strided_coords(char *slice_name0, int stride[], ops_d
 
 void ops_write_plane_group_strided(char *slice_name0, int stride[], ops_dat rho_B0, ops_dat rhou0_B0, ops_dat rhou1_B0,
                                    ops_dat rhou2_B0, ops_dat rhoE_B0, ops_dat WENO_filter_B0) {
+
+  double cpu_start0, elapsed_start0;
+  ops_timers(&cpu_start0, &elapsed_start0);
+
   copy_to_strided_dat(rho_B0, rho_B0_strided, stride);
   copy_to_strided_dat(rhou0_B0, rhou0_B0_strided, stride);
   copy_to_strided_dat(rhou1_B0, rhou1_B0_strided, stride);
   copy_to_strided_dat(rhou2_B0, rhou2_B0_strided, stride);
   copy_to_strided_dat(rhoE_B0, rhoE_B0_strided, stride);
   copy_to_strided_dat(WENO_filter_B0, WENO_filter_B0_strided, stride);
+
   ops_write_plane_group_hdf5({{2, block0np2 / 2}}, slice_name0,
                              {{rho_B0_strided, rhou0_B0_strided, rhou1_B0_strided, rhou2_B0_strided, rhoE_B0_strided,
                                WENO_filter_B0_strided}});
+
+  double cpu_end0, elapsed_end0;
+  ops_timers(&cpu_end0, &elapsed_end0);
+  ops_printf("-----------------------------------------\n");
+  ops_printf("Time to write strided slice HDF5 file %s: %lf\n", slice_name0, elapsed_end0 - elapsed_start0);
+  ops_printf("-----------------------------------------\n");
 }
