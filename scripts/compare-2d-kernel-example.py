@@ -45,13 +45,15 @@ def main(args):
 
     stride_i = int(args.stride_i)
     stride_j = int(args.stride_j)
-    rho_original = rho_original[::stride_i, ::stride_j]
-    if rho_original.shape != rho_strided.shape:
+    rho_original_strided = rho_original[::stride_i, ::stride_j]
+    if rho_original_strided.shape != rho_strided.shape:
         print(
-            "Shape mismatch original/strided = ", rho_original.shape, rho_strided.shape
+            "Shape mismatch original/strided = ",
+            rho_original_strided.shape,
+            rho_strided.shape,
         )
         return
-    rho_diff = rho_original - rho_strided
+    rho_diff = rho_original_strided - rho_strided
 
     fig, ax = pyplot.subplots(1, 3, figsize=(12, 5))
     ax[0].imshow(rho_original)
@@ -60,7 +62,7 @@ def main(args):
     fig.colorbar(im, ax=ax[2])
     ax[0].set_title("Original")
     ax[1].set_title("Strided")
-    ax[2].set_title("Absolute difference")
+    ax[2].set_title("Strided absolute difference")
     fig.tight_layout()
     pyplot.show()
 
