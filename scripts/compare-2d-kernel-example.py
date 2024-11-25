@@ -22,7 +22,6 @@ def main(args):
     except IOError:
         print(f"Unable to open: {args.new_data}")
         sys.exit(1)
-    strided_name = Path(args.new_data).stem
 
     halo_n = 5
     halo_p = 5
@@ -39,7 +38,7 @@ def main(args):
         halo_p_new = int(args.halo_size)
         rho_strided = numpy.array(
             strided_dat["opensbliblock00"]["rho_B0_strided"][
-                halo_n_new:-halo_p_new, halo_n_new:-halo_p_new, halo_n_new:-halo_p_new
+                halo_n_new:-halo_p_new, halo_n_new:-halo_p_new
             ]
         )
 

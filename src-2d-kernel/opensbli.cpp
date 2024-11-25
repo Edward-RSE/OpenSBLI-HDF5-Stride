@@ -231,10 +231,11 @@ int main(int argc, char **argv) {
       ops_halo_transfer(periodicBC_direction1_side0_13_block0);
       ops_halo_transfer(periodicBC_direction1_side1_14_block0);
     }
-    if (fmod(1 + iter, write_output_file) == 0 || iter == 0) {
-      HDF5_IO_Write_0_opensbliblock00_dynamic(opensbliblock00, iter, rho_B0, rhou0_B0, rhou1_B0, rhoE_B0, x0_B0, x1_B0,
-                                              HDF5_timing);
-    }
+    // if (fmod(1 + iter, write_output_file) == 0 || iter == 0) {
+    //   HDF5_IO_Write_0_opensbliblock00_dynamic(opensbliblock00, iter, rho_B0, rhou0_B0, rhou1_B0, rhoE_B0, x0_B0,
+    //   x1_B0,
+    //                                           HDF5_timing);
+    // }
   }
   ops_timers(&cpu_end0, &elapsed_end0);
   ops_printf("\nTimings are:\n");

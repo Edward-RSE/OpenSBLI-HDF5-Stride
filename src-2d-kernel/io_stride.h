@@ -4,6 +4,9 @@
 
 #include <ops_seq.h> /* Have to do this for some reason... it's not been resolved properly */
 
+/*
+ * Declare datasets in global scope because I'm being lazy
+ */
 ops_dat rho_B0_strided;
 ops_dat rhou0_B0_strided;
 ops_dat rhou1_B0_strided;
@@ -11,6 +14,9 @@ ops_dat rhoE_B0_strided;
 ops_dat x0_B0_strided;
 ops_dat x1_B0_strided;
 
+/*
+ * Declare stencils in global scope because I'm being lazy
+ */
 ops_stencil stencil2d_00;
 ops_stencil stencil2d_00_strided;
 
@@ -21,10 +27,6 @@ ops_stencil stencil2d_00_strided;
  * @param strided_data  Destination dataset
  */
 void kernel_copy_to_strided_dat(const ACC<double> &original_dat, ACC<double> &strided_data) {
-  /*
-   * Copying the data is as simple as this... the strided stencil this should be
-   * called with will take care of the indexing.
-   */
   strided_data(0, 0) = original_dat(0, 0);
 }
 
@@ -51,7 +53,7 @@ void copy_to_strided_dat(ops_block block, int stride[], ops_dat &original_dat, o
    * Use a parallel loop to copy data from the original to the smaller data
    * set. The important thing here is that we are looping over the smaller
    * range, e.g. block0np0 / stride[0] rather than block0np0 AND that we are
-   * using a strided stencil for the larger dataset.
+   * using a strided/restricted stencil for the larger dataset.
    */
   ops_par_loop(kernel_copy_to_strided_dat, "kernel_copy_to_strided_dat", block, dims, iter_range,
                ops_arg_dat(original_dat, 1, stencil2d_00_strided, "double", OPS_READ),
@@ -73,14 +75,13 @@ void copy_to_strided_dat(ops_block block, int stride[], ops_dat &original_dat, o
  */
 void HDF5_IO_Init_0_opensbliblock00_strided(ops_block block, int stride[]) {
   /*
-   * Determine the size of the strided datasets. Note that we do not have any
-   * halo cells, but they could be included. This lack of halo cells IS
-   * CONSISTENT with the slice and slab output modes.
+   * Determine the size of the strided datasets. We have some halo cells, but we
+   * don't actually need them if we don't want them.
    */
   int strided_size[] = {block0np0 / stride[0], block0np1 / stride[1]};
   int strided_base[] = {0, 0};
-  int strided_d_p[] = {0, 0};
-  int strided_d_m[] = {0, 0};
+  int strided_d_p[] = {5, 5};
+  int strided_d_m[] = {-5, -5};
   double *dummy = NULL;
 
   /*
@@ -88,29 +89,29 @@ void HDF5_IO_Init_0_opensbliblock00_strided(ops_block block, int stride[]) {
    * in half precision, if desired, but would require the kernel which copies
    * data into these to account for that.
    */
-  rho_B0_strided =
-      ops_decl_dat(block, 1, strided_size, strided_base, strided_d_m, strided_d_p, dummy, "double", "rho_B0_strided");
-  rhou0_B0_strided =
-      ops_decl_dat(block, 1, strided_size, strided_base, strided_d_m, strided_d_p, dummy, "double", "rhou0_B0_strided");
-  rhou1_B0_strided =
-      ops_decl_dat(block, 1, strided_size, strided_base, strided_d_m, strided_d_p, dummy, "double", "rhou1_B0_strided");
-  rhoE_B0_strided =
-      ops_decl_dat(block, 1, strided_size, strided_base, strided_d_m, strided_d_p, dummy, "double", "rhoE_B0_strided");
-  x0_B0_strided =
-      ops_decl_dat(block, 1, strided_size, strided_base, strided_d_m, strided_d_p, dummy, "double", "x0_B0_strided");
-  x1_B0_strided =
-      ops_decl_dat(block, 1, strided_size, strided_base, strided_d_m, strided_d_p, dummy, "double", "x1_B0_strided");
+  rho_B0_strided = ops_decl_dat(block, 1, strided_size, strided_base, strided_d_m, strided_d_p, stride, dummy, "double",
+                                "rho_B0_strided");
+  rhou0_B0_strided = ops_decl_dat(block, 1, strided_size, strided_base, strided_d_m, strided_d_p, stride, dummy,
+                                  "double", "rhou0_B0_strided");
+  rhou1_B0_strided = ops_decl_dat(block, 1, strided_size, strided_base, strided_d_m, strided_d_p, stride, dummy,
+                                  "double", "rhou1_B0_strided");
+  rhoE_B0_strided = ops_decl_dat(block, 1, strided_size, strided_base, strided_d_m, strided_d_p, stride, dummy,
+                                 "double", "rhoE_B0_strided");
+  x0_B0_strided = ops_decl_dat(block, 1, strided_size, strided_base, strided_d_m, strided_d_p, stride, dummy, "double",
+                               "x0_B0_strided");
+  x1_B0_strided = ops_decl_dat(block, 1, strided_size, strided_base, strided_d_m, strided_d_p, stride, dummy, "double",
+                               "x1_B0_strided");
 
   /*
    * Declare TWO stencils. The first stencil is a regular 2D stencil whilst the
-   * second is a strided 2D stencil. Both stencils are around the point (0, 0)
-   * as we don't require any other adjacent cells to copy data.
+   * second is a strided/restricted 2D stencil. Both stencils are around the
+   * point (0, 0) as we don't require any other adjacent cells to copy data.
    */
   const int dims = 2;
   const int points = 1;
   int stencil_point[] = {0, 0};
   stencil2d_00 = ops_decl_stencil(dims, points, stencil_point, "stencil2d_00");
-  stencil2d_00_strided = ops_decl_strided_stencil(dims, points, stencil_point, stride, "stencil2d_00_strided");
+  stencil2d_00_strided = ops_decl_strided_stencil(dims, points, stencil_point, stride, "stencil2d_00_restrict");
 }
 
 /**
