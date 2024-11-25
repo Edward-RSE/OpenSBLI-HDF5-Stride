@@ -1,53 +1,113 @@
-
-#include <ops_seq.h>
-
 /**
- * @brief
- *
- * @param original_dat
- * @param strided_data
+ * @brief Function for writing strided data to disk
  */
-void kernel_copy_to_strided_dat(const ACC<double> &original_dat, ACC<double> &strided_data) {
-  strided_data(0, 0) = original_dat(0, 0);
-}
 
-/**
- * @brief
- *
- */
+#include <ops_seq.h> /* Have to do this for some reason... */
 
 ops_dat rho_B0_strided;
 ops_stencil stencil2d_00;
 ops_stencil stencil2d_00_strided;
 
-int stride[] = {2, 2};
+/**
+ * @brief Copy data from one dataset to another.
+ *
+ * @param original_dat  Source dataset
+ * @param strided_data  Destination dataset
+ */
+void kernel_copy_to_strided_dat(const ACC<double> &original_dat, ACC<double> &strided_data) {
+  /*
+   * Copying the data is as simple as this... the strided stencil this should be
+   * called with will take care of the indexing.
+   */
+  strided_data(0, 0) = original_dat(0, 0);
+}
 
-void declare_strided_datasets(ops_block block) {
+/**
+ * @brief Control function for copying datasets
+ *
+ * @param block
+ * @param stride
+ * @param original_dat
+ * @param strided_dat
+ *
+ * @details
+ *
+ * In this function, we use a parallel loop per dataset because that's how
+ * the kernel is set up. However it would be possible (and maybe more efficient,
+ * I haven't benchmarked it) to do all copies in a single parallel loop/kernel
+ * because they will all have the same interation range and the same stencils.
+ *
+ */
+void copy_to_strided_dat(ops_block block, int stride[], ops_dat original_dat, ops_dat strided_dat) {
+  const int dims = 2;
+  int iter_range[] = {0, block0np0 / stride[0], 0, block0np1 / stride[1]};
+  /*
+   * Use a parallel loop to copy data from the original to the smaller data
+   * set. The important thing here is that we are looping over the smaller
+   * range, e.g. block0np0 / stride[0] rather than block0np0 AND that we are
+   * using a strided stencil for the larger dataset.
+   */
+  ops_par_loop(kernel_copy_to_strided_dat, "kernel_copy_to_strided_dat", block, dims, iter_range,
+               ops_arg_dat(original_dat, 1, stencil2d_00_strided, "double", OPS_READ),
+               ops_arg_dat(strided_dat, 1, stencil2d_00, "double", OPS_WRITE));
+}
+
+/**
+ * @brief Initialise stencil and datasets for strided data output
+ *
+ * @param block   The OPS block datasets will be associated with
+ * @param stride  The strided of the output datasets
+ *
+ * @details
+ *
+ * Note that THIS HAS TO BE CALLED BEFORE OPS_PARTITION, otherwise in MPI modes
+ * the program will crash because it will not be able to partition the datasets
+ * across ranks.
+ *
+ */
+void HDF5_IO_Init_0_opensbliblock00_strided(ops_block block, int stride[]) {
+  /*
+   * Determine the size of the strided datasets. Note that we do not have any
+   * halo cells, but they could be included. This lack of halo cells IS
+   * CONSISTENT with the slice and slab output modes.
+   */
   int strided_size[] = {block0np0 / stride[0], block0np1 / stride[1]};
   int strided_base[] = {0, 0};
   int strided_d_p[] = {0, 0};
   int strided_d_m[] = {0, 0};
   double *dummy = NULL;
 
+  /*
+   * Declare smaller datasets to store strided versions. These could also be
+   * in half precision, if desired, but would require the kernel which copies
+   * data into these to account for that.
+   */
   rho_B0_strided =
       ops_decl_dat(block, 1, strided_size, strided_base, strided_d_m, strided_d_p, dummy, "double", "rho_B0_strided");
 
+  /*
+   * Declare TWO stencils. The first stencil is a regular 2D stencil whilst the
+   * second is a strided 2D stencil. Both stencils are around the point (0, 0)
+   * as we don't require any other adjacent cells to copy data.
+   */
+  const int dims = 2;
+  const int points = 1;
   int stencil_point[] = {0, 0};
-  // int restrict_stencil_point[] = {0, 0, -1, 0, 1, 0};
-  stencil2d_00 = ops_decl_stencil(2, 1, stencil_point, "stencil2d_00");
-  stencil2d_00_strided = ops_decl_strided_stencil(2, 1, stencil_point, stride, "stencil2d_00_strided");
+  stencil2d_00 = ops_decl_stencil(dims, points, stencil_point, "stencil2d_00");
+  stencil2d_00_strided = ops_decl_strided_stencil(dims, points, stencil_point, stride, "stencil2d_00_strided");
 }
 
-void write_strided_data_sets(ops_block block, ops_dat rho_B0) {
-  char name[80] = "opensbli_output-strided.h5";
-  int iter_range[] = {0, block0np0 / stride[0], 0, block0np1 / stride[1]};
+/**
+ * @brief Write data in a strided output to disk
+ *
+ * @param block   The OPS block containing the datasets
+ * @param stride  The strided of the output datasets
+ * @param rho_B0  The first dataset to write
+ */
+void HDF5_IO_Write_0_opensbliblock00_strided(ops_block block, int stride[], ops_dat rho_B0) {
+  copy_to_strided_dat(block, stride, rho_B0, rho_B0_strided);
 
-  ops_printf("\nIter range %d %d %d %d\n", iter_range[0], iter_range[1], iter_range[2], iter_range[3]);
-
-  ops_par_loop(kernel_copy_to_strided_dat, "kernel_copy_to_strided_dat", block, 2, iter_range,
-               ops_arg_dat(rho_B0, 1, stencil2d_00_strided, "double", OPS_READ),
-               ops_arg_dat(rho_B0_strided, 1, stencil2d_00, "double", OPS_WRITE));
-
+  const char name[80] = "opensbli_output-strided.h5";
   ops_fetch_block_hdf5_file(block, name);
   ops_fetch_dat_hdf5_file(rho_B0_strided, name);
 }
