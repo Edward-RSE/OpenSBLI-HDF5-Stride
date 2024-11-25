@@ -22,8 +22,8 @@ int main(int argc, char **argv) {
   block0np1 = 100;
   Delta0block0 = 2.0 / (block0np0);
   Delta1block0 = 2.0 / (block0np1);
-  write_output_file = 25;
-  HDF5_timing = 0;
+  write_output_file = 500;
+  HDF5_timing = 1;
   gama = 1.4;
   shock_filter_control = 1.00000000000000;
   gamma_m1 = -1 + gama;
@@ -242,7 +242,8 @@ int main(int argc, char **argv) {
   ops_printf("Total Wall time %lf\n", elapsed_end0 - elapsed_start0);
 
   HDF5_IO_Write_0_opensbliblock00(opensbliblock00, rho_B0, rhou0_B0, rhou1_B0, rhoE_B0, x0_B0, x1_B0, HDF5_timing);
-  HDF5_IO_Write_0_opensbliblock00_strided(opensbliblock00, dat_stride, rho_B0);
+  HDF5_IO_Write_0_opensbliblock00_strided(opensbliblock00, dat_stride, rho_B0, rhou0_B0, rhou1_B0, rhoE_B0, x0_B0,
+                                          x1_B0);
   ops_exit();
   // Main program end
 }
