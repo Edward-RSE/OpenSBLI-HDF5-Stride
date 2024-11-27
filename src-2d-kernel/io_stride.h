@@ -21,7 +21,7 @@ ops_stencil stencil2d_00_strided;
  * @param original_dat  Source dataset
  * @param strided_data  Destination dataset
  */
-void kernel_copy_to_strided_dat(const ACC<double> &original_dat, ACC<double> &strided_data) {
+void restrict_strided_copy_kernel(const ACC<double> &original_dat, ACC<double> &strided_data) {
   strided_data(0, 0) = original_dat(0, 0);
 }
 
@@ -50,7 +50,7 @@ void copy_to_strided_dat(ops_block block, int stride[], ops_dat &original_dat, o
    * range, e.g. block0np0 / stride[0] rather than block0np0 AND that we are
    * using a strided/restricted stencil for the larger dataset.
    */
-  ops_par_loop(kernel_copy_to_strided_dat, "kernel_copy_to_strided_dat", block, dims, iter_range,
+  ops_par_loop(restrict_strided_copy_kernel, "restrict_strided_copy_kernel", block, dims, iter_range,
                ops_arg_dat(original_dat, 1, stencil2d_00_strided, "double", OPS_READ),
                ops_arg_dat(strided_dat, 1, stencil2d_00, "double", OPS_WRITE));
 }
@@ -94,7 +94,7 @@ void HDF5_IO_Init_0_opensbliblock00_strided(ops_block block, int stride[]) {
   const int points = 1;
   int stencil_point[] = {0, 0};
   stencil2d_00 = ops_decl_stencil(dims, points, stencil_point, "stencil2d_00");
-  stencil2d_00_strided = ops_decl_strided_stencil(dims, points, stencil_point, stride, "stencil2d_00_strided");
+  stencil2d_00_strided = ops_decl_restrict_stencil(dims, points, stencil_point, stride, "RESTRICT_stencil2d_00");
 }
 
 /**
