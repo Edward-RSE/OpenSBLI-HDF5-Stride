@@ -80,9 +80,7 @@ void HDF5_IO_Init_0_opensbliblock00_strided(ops_block block, int stride[]) {
   double *dummy = NULL;
 
   /*
-   * Declare smaller datasets to store strided versions. These could also be
-   * in half precision, if desired, but would require the kernel which copies
-   * data into these to account for that.
+   * Declare smaller datasets to store strided versions.
    */
   rho_B0_strided =
       ops_decl_dat(block, 1, strided_size, strided_base, strided_d_m, strided_d_p, dummy, "double", "rho_B0_strided");
