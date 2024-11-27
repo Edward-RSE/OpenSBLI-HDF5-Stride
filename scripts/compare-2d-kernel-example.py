@@ -55,8 +55,10 @@ def main(args):
     rho_diff = rho_original_strided - rho_strided
 
     fig, ax = pyplot.subplots(1, 3, figsize=(12, 5))
-    ax[0].imshow(rho_original)
-    ax[1].imshow(rho_strided)
+    im = ax[0].imshow(rho_original)
+    fig.colorbar(im, ax=ax[0])
+    im = ax[1].imshow(rho_strided)
+    fig.colorbar(im, ax=ax[1])
     im = ax[2].imshow(rho_diff[:, :])
     fig.colorbar(im, ax=ax[2])
     ax[0].set_title("Original")
