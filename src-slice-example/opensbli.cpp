@@ -19,9 +19,9 @@ int main(int argc, char **argv) {
   // Set restart to 1 to restart the simulation from HDF5 file
   restart = 0;
   // User defined constant values
-  block0np0 = 360;
-  block0np1 = 355;
-  block0np2 = 300;
+  block0np0 = 180;
+  block0np1 = 170;
+  block0np2 = 150;
   Delta0block0 = 6.0 / block0np0;
   Delta1block0 = 2.0 / (block0np1 - 1);
   Delta2block0 = 3.0 / block0np2;
