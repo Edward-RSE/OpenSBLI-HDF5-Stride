@@ -7,7 +7,44 @@
 #include "ops_seq.h"
 #include "opensbliblock00_kernels.h"
 #include "io.h"
+
+/*
+ * Declare stencils in global scope because I'm being lazy
+ */
+ops_stencil S2D_00;
+ops_stencil S2D_RESTRICT_00_M10_P10;
+
+/**
+ * @brief Control function for copying datasets
+ *
+ * @param block
+ * @param stride
+ * @param original_dat
+ * @param strided_dat
+ *
+ * @details
+ *
+ * In this function, we use a parallel loop per dataset because that's how
+ * the kernel is set up. However it would be possible (and maybe more efficient,
+ * I haven't benchmarked it) to do all copies in a single parallel loop/kernel
+ * because they will all have the same interation range and the same stencils.
+ *
+ */
+void copy_to_strided_dat(ops_block block, int stride[], ops_dat &original_dat, ops_dat &strided_dat) {
+  int iter_range[] = {0, block0np0 / stride[0], 0, block0np1 / stride[1]};
+  /*
+   * Use a parallel loop to copy data from the original to the smaller data
+   * set. The important thing here is that we are looping over the smaller
+   * range, e.g. block0np0 / stride[0] rather than block0np0 AND that we are
+   * using a strided/restricted stencil for the larger dataset.
+   */
+  ops_par_loop(restrict_kernel, "restrict_kernel", block, 2, iter_range,
+               ops_arg_dat(original_dat, 1, S2D_RESTRICT_00_M10_P10, "double", OPS_READ),
+               ops_arg_dat(strided_dat, 1, S2D_00, "double", OPS_WRITE), ops_arg_idx());
+}
+
 #include "io_stride.h"
+
 int main(int argc, char **argv) {
   // Initializing OPS
   ops_init(argc, argv, 1);

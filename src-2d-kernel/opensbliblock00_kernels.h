@@ -1370,4 +1370,14 @@ ACC<double> &rhou0_RKold_B0, const ACC<double> &rhou1_RKold_B0, ACC<double> &rho
 
 }
 
+/**
+ * @brief Copy data from one dataset to another.
+ *
+ * @param original_dat  Source dataset
+ * @param strided_data  Destination dataset
+ */
+void restrict_kernel(const ACC<double> &original_dat, ACC<double> &smaller_dat, int *idx) {
+  smaller_dat(0, 0) = original_dat(0, 0);
+}
+
 #endif

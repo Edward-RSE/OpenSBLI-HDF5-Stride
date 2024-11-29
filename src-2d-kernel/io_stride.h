@@ -2,58 +2,10 @@
  * @brief Function for writing strided data to disk
  */
 
-#include <ops_seq.h> /* Have to do this for some reason... it's not been resolved properly */
-
 /*
  * Declare datasets in global scope because I'm being lazy
  */
 ops_dat rho_B0_strided;
-
-/*
- * Declare stencils in global scope because I'm being lazy
- */
-ops_stencil stencil2d_00;
-ops_stencil stencil2d_00_strided;
-
-/**
- * @brief Copy data from one dataset to another.
- *
- * @param original_dat  Source dataset
- * @param strided_data  Destination dataset
- */
-void restrict_strided_copy_kernel(const ACC<double> &original_dat, ACC<double> &strided_data) {
-  strided_data(0, 0) = original_dat(0, 0);
-}
-
-/**
- * @brief Control function for copying datasets
- *
- * @param block
- * @param stride
- * @param original_dat
- * @param strided_dat
- *
- * @details
- *
- * In this function, we use a parallel loop per dataset because that's how
- * the kernel is set up. However it would be possible (and maybe more efficient,
- * I haven't benchmarked it) to do all copies in a single parallel loop/kernel
- * because they will all have the same interation range and the same stencils.
- *
- */
-void copy_to_strided_dat(ops_block block, int stride[], ops_dat &original_dat, ops_dat &strided_dat) {
-  const int dims = 2;
-  int iter_range[] = {0, block0np0 / stride[0], 0, block0np1 / stride[1]};
-  /*
-   * Use a parallel loop to copy data from the original to the smaller data
-   * set. The important thing here is that we are looping over the smaller
-   * range, e.g. block0np0 / stride[0] rather than block0np0 AND that we are
-   * using a strided/restricted stencil for the larger dataset.
-   */
-  ops_par_loop(restrict_strided_copy_kernel, "restrict_strided_copy_kernel", block, dims, iter_range,
-               ops_arg_dat(original_dat, 1, stencil2d_00_strided, "double", OPS_READ),
-               ops_arg_dat(strided_dat, 1, stencil2d_00, "double", OPS_WRITE));
-}
 
 /**
  * @brief Initialise stencil and datasets for strided data output
@@ -79,11 +31,14 @@ void HDF5_IO_Init_0_opensbliblock00_strided(ops_block block, int stride[]) {
   int strided_d_m[] = {-5, -5};
   double *dummy = NULL;
 
+  ops_printf("Strided size: %d %d\n", strided_size[0], strided_size[1]);
+  ops_printf("Stride size: %d %d\n", stride[0], stride[1]);
+
   /*
    * Declare smaller datasets to store strided versions.
    */
-  rho_B0_strided =
-      ops_decl_dat(block, 1, strided_size, strided_base, strided_d_m, strided_d_p, dummy, "double", "rho_B0_strided");
+  rho_B0_strided = ops_decl_dat(block, 1, strided_size, strided_base, strided_d_m, strided_d_p, stride, dummy, "double",
+                                "rho_B0_strided");
 
   /*
    * Declare TWO stencils. The first stencil is a regular 2D stencil whilst the
@@ -92,9 +47,10 @@ void HDF5_IO_Init_0_opensbliblock00_strided(ops_block block, int stride[]) {
    */
   const int dims = 2;
   const int points = 1;
-  int stencil_point[] = {0, 0};
-  stencil2d_00 = ops_decl_stencil(dims, points, stencil_point, "stencil2d_00");
-  stencil2d_00_strided = ops_decl_restrict_stencil(dims, points, stencil_point, stride, "RESTRICT_stencil2d_00");
+  int s2D_00[] = {0, 0};
+  int s2D_00_M10_P10[] = {0, 0, -1, 0, 1, 0};
+  S2D_00 = ops_decl_stencil(2, 1, s2D_00, "00");
+  S2D_RESTRICT_00_M10_P10 = ops_decl_restrict_stencil(2, 3, s2D_00_M10_P10, stride, "RESTRICT_00_M10_P10");
 }
 
 /**
