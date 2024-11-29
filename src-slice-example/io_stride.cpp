@@ -24,7 +24,7 @@ ops_stencil stencil2d_restrict_00;
  * @param original_dat  Source dataset
  * @param strided_dat   Destination dataset
  */
-void restrict_kernel(const ACC<double> &original_dat, ACC<double> &strided_dat) {
+void restrict_kernel(const ACC<double> &original_dat, ACC<double> &strided_dat, const int *idx) {
   strided_dat(0, 0, 0) = original_dat(0, 0, 0);
 }
 
@@ -57,7 +57,8 @@ void copy_to_strided_dat(ops_block block, int block0np0, int block0np1, int bloc
    */
   ops_par_loop(restrict_kernel, "restrict_kernel", block, 3, iter_range,
                ops_arg_dat(original_dat, 1, stencil2d_restrict_00, "double", OPS_READ),
-               ops_arg_dat(strided_dat, 1, stencil2d_00, "double", OPS_WRITE));
+               ops_arg_dat(strided_dat, 1, stencil2d_00, "double", OPS_WRITE),
+               ops_arg_idx());
 }
 
 /**
