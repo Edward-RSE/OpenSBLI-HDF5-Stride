@@ -7,7 +7,12 @@
 #include "ops_seq.h"
 #include "opensbliblock00_kernels.h"
 #include "io.h"
-#include "io_stride_slice.h"
+
+/* Function prototypes for the strided output */
+void HDF5_IO_Init_0_opensbliblock00_strided(ops_block block, int block0np0, int block0np1, int block0np2, int stride[]);
+void HDF5_IO_Write_0_opensbliblock00_strided(char name[], ops_block block, int block0np0, int block0np1, int block0np2,
+                                             int stride[], ops_dat &rho_B0);
+
 int main(int argc, char **argv) {
   // Initializing OPS
   ops_init(argc, argv, 1);
@@ -119,8 +124,8 @@ int main(int argc, char **argv) {
 #include "stencils.h"
 #include "bc_exchanges.h"
 
-  int stride[] = {2, 2, 1};
-  declare_empty_strided_ops_dat(opensbliblock00, stride);
+  int stride[] = {2, 2, 2};
+  HDF5_IO_Init_0_opensbliblock00_strided(opensbliblock00, block0np0, block0np1, block0np2, stride);
 
   // Init OPS partition
   double partition_start0, elapsed_partition_start0, partition_end0, elapsed_partition_end0;
@@ -191,7 +196,7 @@ int main(int argc, char **argv) {
   sprintf(slice_name0, "0");
 
   // ops_write_plane_group_hdf5({{2, block0np2 / 2}}, slice_name0, {{x0_B0, x1_B0}});
-  ops_write_plane_group_strided_coords(slice_name0, stride, x0_B0, x1_B0);
+  // ops_write_plane_group_strided_coords(slice_name0, stride, x0_B0, x1_B0);
 
   // Initialize loop timers
   double cpu_start0, elapsed_start0, cpu_end0, elapsed_end0;
@@ -711,7 +716,8 @@ int main(int argc, char **argv) {
     if (fmod(1 + iter, write_slices) == 0) {
       char slice_name0[80];
       sprintf(slice_name0, "%d", iter + 1);
-      ops_write_plane_group_strided(slice_name0, stride, rho_B0, rhou0_B0, rhou1_B0, rhou2_B0, rhoE_B0, WENO_filter_B0);
+      HDF5_IO_Write_0_opensbliblock00_strided(slice_name0, opensbliblock00, block0np0, block0np1, block0np2, stride,
+                                              rho_B0);
     }
 
     if (fmod(1 + iter, write_slices) == 0) {

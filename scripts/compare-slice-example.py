@@ -6,7 +6,6 @@ import argparse
 import sys
 from pathlib import Path
 
-from IPython import embed
 import h5py
 import numpy
 from matplotlib import pyplot
