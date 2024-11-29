@@ -124,7 +124,7 @@ int main(int argc, char **argv) {
 #include "stencils.h"
 #include "bc_exchanges.h"
   // Define and declare strided output datasets
-  int output_stride[] = {2, 2, 2};
+  int output_stride[] = {2, 2, 1};
   HDF5_IO_Init_0_opensbliblock00_strided(opensbliblock00, block0np0, block0np1, block0np2, output_stride);
   // Init OPS partition
   double partition_start0, elapsed_partition_start0, partition_end0, elapsed_partition_end0;
