@@ -36,7 +36,7 @@ def main(args):
         ]
     )
     variable_strided = numpy.array(
-        strided_dat["opensbliblock00"][f"{original_dat_iter}"][variable][:, :]
+        strided_dat["opensbliblock00"][f"{original_dat_iter}"][f"{variable}_strided"][:, :]
     )
 
     slice_index = int((block0np2) / 2)

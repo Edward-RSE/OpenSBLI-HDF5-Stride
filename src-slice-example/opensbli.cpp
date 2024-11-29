@@ -50,8 +50,8 @@ int main(int argc, char **argv) {
   inv_rfact1_block0 = 1.0 / Delta1block0;
   filter_frequency = 25;
   DRP_filt = 0.100000000000000;
-  HDF5_timing = 0;
-  write_output_file = 500;
+  HDF5_timing = 1;
+  write_output_file = 2;
   write_slices = 2;
   inv2Delta0block0 = 1.0 / (Delta0block0 * Delta0block0);
   inv2Delta1block0 = 1.0 / (Delta1block0 * Delta1block0);
