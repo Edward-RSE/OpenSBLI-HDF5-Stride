@@ -19,40 +19,40 @@ int main(int argc, char **argv) {
   // Set restart to 1 to restart the simulation from HDF5 file
   restart = 0;
   // User defined constant values
-  block0np0 = 180;
-  block0np1 = 170;
-  block0np2 = 150;
+  block0np0 = 360;
+  block0np1 = 355;
+  block0np2 = 300;
   Delta0block0 = 6.0 / block0np0;
   Delta1block0 = 2.0 / (block0np1 - 1);
   Delta2block0 = 3.0 / block0np2;
-  niter = 1;
+  niter = 4;
   double rkB[] = {0.149659021999300, 0.379210312999900, 0.822955029386900, 0.699450455948800, 0.153057247968100};
   double rkA[] = {0, -0.417890474500000, -1.19215169464300, -1.69778469247100, -1.51418344425700};
   dt = 0.0001;
+  Twall = 1.0;
   Minf = 0.4;
   gama = 1.4;
-  Twall = 1.0;
   aCF = 100.0;
-  c1 = 0;
-  Re = 400.0;
   c2 = 0;
-  Pr = 0.7;
   c0 = -1;
+  Pr = 0.7;
+  Re = 400.0;
+  c1 = 0;
+  lx2 = 3.0;
   lx0 = 6.0;
   stretch = 1.7;
-  lx2 = 3.0;
   shock_filter_control = 1.00000000000000;
   gamma_m1 = -1 + gama;
   Ducros_check = 0.0500000000000000;
   Ducros_select = 0.0500000000000000;
-  inv_rfact0_block0 = 1.0 / Delta0block0;
   inv_rfact2_block0 = 1.0 / Delta2block0;
+  inv_rfact0_block0 = 1.0 / Delta0block0;
   inv_rfact1_block0 = 1.0 / Delta1block0;
-  filter_frequency = 5;
+  filter_frequency = 25;
   DRP_filt = 0.100000000000000;
-  HDF5_timing = 1;
-  write_output_file = 1;
-  write_slices = 1;
+  HDF5_timing = 0;
+  write_output_file = 500;
+  write_slices = 2;
   inv2Delta0block0 = 1.0 / (Delta0block0 * Delta0block0);
   inv2Delta1block0 = 1.0 / (Delta1block0 * Delta1block0);
   inv2Delta2block0 = 1.0 / (Delta2block0 * Delta2block0);
@@ -123,10 +123,9 @@ int main(int argc, char **argv) {
 // Define and declare stencils
 #include "stencils.h"
 #include "bc_exchanges.h"
-
-  int stride[] = {2, 2, 2};
-  HDF5_IO_Init_0_opensbliblock00_strided(opensbliblock00, block0np0, block0np1, block0np2, stride);
-
+  // Define and declare strided output datasets
+  int output_stride[] = {2, 2, 2};
+  HDF5_IO_Init_0_opensbliblock00_strided(opensbliblock00, block0np0, block0np1, block0np2, output_stride);
   // Init OPS partition
   double partition_start0, elapsed_partition_start0, partition_end0, elapsed_partition_end0;
   ops_timers(&partition_start0, &elapsed_partition_start0);
@@ -194,10 +193,7 @@ int main(int argc, char **argv) {
 
   char slice_name0[80];
   sprintf(slice_name0, "0");
-
-  // ops_write_plane_group_hdf5({{2, block0np2 / 2}}, slice_name0, {{x0_B0, x1_B0}});
-  // ops_write_plane_group_strided_coords(slice_name0, stride, x0_B0, x1_B0);
-
+  ops_write_plane_group_hdf5({{2, block0np2 / 2}}, slice_name0, {{x0_B0, x1_B0}});
   // Initialize loop timers
   double cpu_start0, elapsed_start0, cpu_end0, elapsed_end0;
   ops_timers(&cpu_start0, &elapsed_start0);
@@ -206,7 +202,7 @@ int main(int argc, char **argv) {
   ops_timers(&inner_start, &elapsed_inner_start);
   for (iter = start_iter; iter <= start_iter + niter - 1; iter++) {
     simulation_time = tstart + dt * ((iter - start_iter) + 1);
-    if ((iter + 1) % (niter / 10) == 0) {
+    if (fmod(iter + 1, 100) == 0) {
       ops_timers(&inner_end, &elapsed_inner_end);
       ops_printf("Iteration: %d. Time-step: %.3e. Simulation time: %.5f. Time/iteration: %lf.\n", iter + 1, dt,
                  simulation_time, (elapsed_inner_end - elapsed_inner_start) / 100);
@@ -713,11 +709,18 @@ int main(int argc, char **argv) {
                                               x0_B0, x1_B0, x2_B0, D11_B0, HDF5_timing);
     }
 
+    //     if (fmod(1 + iter, write_slices) == 0) {
+    //       char slice_name0[80];
+    //       sprintf(slice_name0, "%d", iter + 1);
+    //       ops_write_plane_group_hdf5({{2, block0np2 / 2}}, slice_name0,
+    //                                  {{rho_B0, rhou0_B0, rhou1_B0, rhou2_B0, rhoE_B0, WENO_filter_B0}});
+    //     }
+
     if (fmod(1 + iter, write_slices) == 0) {
       char slice_name0[80];
       sprintf(slice_name0, "%d", iter + 1);
-      HDF5_IO_Write_0_opensbliblock00_strided(slice_name0, opensbliblock00, block0np0, block0np1, block0np2, stride,
-                                              rho_B0);
+      HDF5_IO_Write_0_opensbliblock00_strided(slice_name0, opensbliblock00, block0np0, block0np1, block0np2,
+                                              output_stride, rho_B0);
     }
 
     if (fmod(1 + iter, write_slices) == 0) {

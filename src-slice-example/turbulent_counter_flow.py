@@ -15,10 +15,7 @@ simulation_parameters = {
     "Minf": "0.4",
     "Pr": "0.7",
     "dt": "0.0001",
-    "niter": "1000",
-    # "block0np0": "64",
-    # "block0np1": "64",
-    # "block0np2": "64",
+    "niter": "4",
     "block0np0": "360",
     "block0np1": "355",
     "block0np2": "300",
@@ -403,7 +400,7 @@ grid_slice_hdf5_side = iohdf5_slices(blocknumber=0, **{"iotype": "Init"})
 coords = [([DataObject("x0"), DataObject("x1")], 2, "block0np2/2")]
 grid_slice_hdf5_side.add_slices(coords)
 # Q vector slices written out in time
-slices_hdf5_side = iohdf5_slices(save_every=500, blocknumber=0, **{"iotype": "Write"})
+slices_hdf5_side = iohdf5_slices(save_every=2, blocknumber=0, **{"iotype": "Write"})
 # x-y side view
 if not weno and not teno and not TVD:
     slice_arrays = [
@@ -421,7 +418,7 @@ coords = [([DataObject("x0"), DataObject("x2")], 1, 20)]
 coords += [([DataObject("x0"), DataObject("x2")], 1, "block0np1 - 20")]
 grid_slice_hdf5_surfaces.add_slices(coords)
 # Q vector slices written out in time
-slices_hdf5_surfaces = iohdf5_slices(save_every=500, blocknumber=0, **{"iotype": "Write"})
+slices_hdf5_surfaces = iohdf5_slices(save_every=2, blocknumber=0, **{"iotype": "Write"})
 # Wall normal planes
 slices = [(slice_arrays, 1, 20)]
 slices += [(slice_arrays, 1, "block0np1 - 20")]
