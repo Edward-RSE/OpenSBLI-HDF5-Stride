@@ -6,7 +6,7 @@
  *
  */
 
-#define OPS_2D
+#define OPS_3D
 #define OPS_API 2
 
 #include "ops_seq.h"
