@@ -48,7 +48,7 @@ void restrict_kernel(const ACC<double> &original_dat, ACC<double> &strided_dat, 
  */
 void copy_to_strided_dat(ops_block block, int block0np0, int block0np1, int block0np2, int stride[],
                          ops_dat &original_dat, ops_dat &strided_dat) {
-  int iter_range[] = {0, block0np0 / stride[0], 0, block0np1 / stride[1], 0, block0np2 / stride[2]};
+  int iter_range[] = {0, block0np0 / stride[0], 0, block0np1 / stride[1], block0np2 / 2, block0np2 / 2 + 1};
   /*
    * Use a parallel loop to copy data from the original to the smaller data
    * set. The important thing here is that we are looping over the smaller
