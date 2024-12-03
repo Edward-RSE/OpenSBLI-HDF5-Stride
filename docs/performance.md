@@ -36,4 +36,5 @@ not ideal. Let's see how this scales by doing the copy in parallel, using a GPU 
 | Slice             | 4.722     | 2              |
 | Slice with stride | 8.119     | 0.086          |
 
-Still takes longer.
+Still takes longer. Although, I'm not sure why it takes longer to write a slice to disk on Iridis X, when it takes less
+time to write the "regular" output to disk. I presume this is something to do with the parallel file system.
