@@ -130,7 +130,7 @@ void HDF5_IO_Write_0_opensbliblock00_slab(char name[], ops_block block, int bloc
   double elapsed_end0;
   char slab_name[80];
   char output_name[80] = "opensbli_output-slab_strided.h5";
-  int slab_range[] = {0, block0np2, 0, block0np1, 0, block0np0};
+  int slab_range[] = {0, block0np0, 0, block0np1, 0, block0np2};
 
   ops_printf("%s:block0np0 = %d\n", __func__, block0np0);
   ops_printf("%s:block0np1 = %d\n", __func__, block0np1);
@@ -144,14 +144,14 @@ void HDF5_IO_Write_0_opensbliblock00_slab(char name[], ops_block block, int bloc
   ops_timers(&cpu_start0, &elapsed_start0);
 
   /* Copy data to strided datasets */
-  // copy_to_strided_dat(block, block0np0, block0np1, block0np2, stride, rho_B0, rho_B0_strided);
-  // ops_printf("rho_B0->size = %d %d %d\n", rho_B0->size[0], rho_B0->size[1], rho_B0->size[2]);
-  // ops_printf("rho_B0_strided->size = %d %d %d\n", rho_B0_strided->size[0], rho_B0_strided->size[1],
-  //            rho_B0_strided->size[2]);
+  copy_to_strided_dat(block, block0np0, block0np1, block0np2, stride, rho_B0, rho_B0_strided);
+  ops_printf("rho_B0->size = %d %d %d\n", rho_B0->size[0], rho_B0->size[1], rho_B0->size[2]);
+  ops_printf("rho_B0_strided->size = %d %d %d\n", rho_B0_strided->size[0], rho_B0_strided->size[1],
+             rho_B0_strided->size[2]);
 
   /* Write to disk, using the standard HDF5 API */
   snprintf(slab_name, 80, "%s/rho_B0", name);
-  ops_write_data_slab_hdf5(rho_B0, slab_range, output_name, slab_name);
+  ops_write_data_slab_hdf5(rho_B0_strided, slab_range, output_name, slab_name);
 
   ops_timers(&cpu_end0, &elapsed_end0);
   ops_printf("-----------------------------------------\n");

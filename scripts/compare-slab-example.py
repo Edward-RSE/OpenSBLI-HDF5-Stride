@@ -30,6 +30,7 @@ def main(args):
 
     variable_original = numpy.array(
         original_dat["opensbliblock00"][variable][
+            # :, :, :
             halo_n:-halo_p, halo_n:-halo_p, halo_n:-halo_p
         ]
     )
@@ -43,9 +44,8 @@ def main(args):
     block0np0 = 180
     block0np1 = 175
     block0np2 = 150
-    variable_original_slice = variable_original[
-        0 : int(block0np0 / 1), 0 : int(block0np1 / 1), 0 : int(block0np2 / 1)
-    ]
+    variable_original_slice = variable_original[0:block0np0, 0:block0np1, 0:block0np2]
+    variable_original_slice = variable_original
 
     print(args.original_data, variable_original_slice.shape)
     print(args.new_data, variable_slab_2d.shape)
