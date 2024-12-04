@@ -38,3 +38,11 @@ not ideal. Let's see how this scales by doing the copy in parallel, using a GPU 
 
 Still takes longer. Although, I'm not sure why it takes longer to write a slice to disk on Iridis X, when it takes less
 time to write the "regular" output to disk. I presume this is something to do with the parallel file system.
+
+## Optimisation
+
+The underlying issue for the strided output being slower, or comparable, is because it copies data from one `ops_dat` to
+another which the regular output methods don't do. So we are doing extra work. There's no way around this, unless
+changes are made to the OPS HDF5 API. It would require either changing `fetch_loop_slab()` to include a `stride`
+argument and accounting for it in the various loops, or by unifying the HDF5 to use HDF5 Hyperslabs which include a
+stride parameter. Hyperslabs already are used in OPS, but only seem to be present in the MPI API.
