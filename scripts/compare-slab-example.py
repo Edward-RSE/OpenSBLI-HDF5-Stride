@@ -44,11 +44,11 @@ def main(args):
     block0np1 = 175
     block0np2 = 150
     variable_original_slice = variable_original[
-        0 : int(block0np0 / 2), 0 : int(block0np1 / 2), 0 : int(block0np2 / 2)
+        0 : int(block0np0 / 1), 0 : int(block0np1 / 1), 0 : int(block0np2 / 1)
     ]
 
-    print(variable_original_slice.shape)
-    print(variable_slab_2d.shape)
+    print(args.original_data, variable_original_slice.shape)
+    print(args.new_data, variable_slab_2d.shape)
 
     for k in range(variable_slab_2d.shape[2]):
         fig, ax = pyplot.subplots(1, 3, figsize=(12, 5))

@@ -10,8 +10,8 @@
 
 /* Function prototypes for the strided output */
 void HDF5_IO_Init_0_opensbliblock00_strided(ops_block block, int block0np0, int block0np1, int block0np2, int stride[]);
-void HDF5_IO_Write_0_opensbliblock00_strided(char name[], ops_block block, int block0np0, int block0np1, int block0np2,
-                                             int stride[], ops_dat &rho_B0);
+void HDF5_IO_Write_0_opensbliblock00_slab(char name[], ops_block block, int block0np0, int block0np1, int block0np2,
+                                          int stride[], ops_dat &rho_B0);
 
 int main(int argc, char **argv) {
   // Initializing OPS
@@ -22,7 +22,7 @@ int main(int argc, char **argv) {
   block0np0 = 180;
   block0np1 = 175;
   block0np2 = 150;
-  int output_stride[] = {2, 2, 2};
+  int output_stride[] = {1, 1, 1};
   Delta0block0 = 6.0 / block0np0;
   Delta1block0 = 2.0 / (block0np1 - 1);
   Delta2block0 = 3.0 / block0np2;
@@ -704,29 +704,16 @@ int main(int argc, char **argv) {
                  ops_arg_dat(rhou1_B0, 1, stencil_0_00_00_00_3, "double", OPS_RW),
                  ops_arg_dat(rhou2_B0, 1, stencil_0_00_00_00_3, "double", OPS_RW), ops_arg_idx());
 
-    if (fmod(1 + iter, write_output_file) == 0 || iter == 0) {
+    if (fmod(1 + iter, write_output_file) == 0) {
       HDF5_IO_Write_1_opensbliblock00_dynamic(opensbliblock00, iter, rho_B0, rhou0_B0, rhou1_B0, rhou2_B0, rhoE_B0,
                                               x0_B0, x1_B0, x2_B0, D11_B0, HDF5_timing);
     }
 
-    //     if (fmod(1 + iter, write_slices) == 0) {
-    //       char slice_name0[80];
-    //       sprintf(slice_name0, "%d", iter + 1);
-    //       ops_write_plane_group_hdf5({{2, block0np2 / 2}}, slice_name0,
-    //                                  {{rho_B0, rhou0_B0, rhou1_B0, rhou2_B0, rhoE_B0, WENO_filter_B0}});
-    //     }
-
     if (fmod(1 + iter, write_slices) == 0) {
-      char slice_name0[80];
-      sprintf(slice_name0, "%d", iter + 1);
-      ops_write_plane_group_hdf5({{2, block0np2 / 2}}, slice_name0, {{rho_B0}});
-      // HDF5_IO_Write_0_opensbliblock00_strided(slice_name0, opensbliblock00, block0np0, block0np1, block0np2,
-      //                                         output_stride, rho_B0);
-      int slab_range[] = {0, block0np2 / 2, 0, block0np1 / 2, 0, block0np0 / 2};
-      // int slab_range[] = {block0np2 / 2, block0np2 / 2 + 1, 0, block0np1, 0, block0np0};
       char slab_name0[80];
-      snprintf(slab_name0, 80, "opensbliblock00/%d/rho_B0", iter + 1);
-      ops_write_data_slab_hdf5(rho_B0, slab_range, "rho_B0-slab.h5", slab_name0);
+      snprintf(slab_name0, 80, "opensbliblock00/%d", iter + 1);
+      HDF5_IO_Write_0_opensbliblock00_slab(slab_name0, opensbliblock00, block0np0, block0np1, block0np2, output_stride,
+                                           rho_B0);
     }
 
     if (fmod(1 + iter, write_slices) == 0) {
@@ -773,13 +760,15 @@ int main(int argc, char **argv) {
                ops_arg_dat(u2u1mean_B0, 1, stencil_0_00_00_00_3, "double", OPS_RW),
                ops_arg_dat(u2u2mean_B0, 1, stencil_0_00_00_00_3, "double", OPS_RW));
 
-  HDF5_IO_Write_1_opensbliblock00(opensbliblock00, rho_B0, rhou0_B0, rhou1_B0, rhou2_B0, rhoE_B0, x0_B0, x1_B0, x2_B0,
-                                  D11_B0, HDF5_timing);
-  HDF5_IO_Write_0_opensbliblock00(opensbliblock00, u2u2mean_B0, rhou2mean_B0, rhou2u1mean_B0, u0u0mean_B0,
-                                  rhou1u0mean_B0, E_mean_B0, u1u0mean_B0, u1u1mean_B0, rhou2u0mean_B0, rhou0mean_B0,
-                                  rhou1mean_B0, pp_mean_B0, rhou2u2mean_B0, u2mean_B0, M_mean_B0, u2u0mean_B0,
-                                  p_mean_B0, a_mean_B0, T_mean_B0, rhou0u0mean_B0, rhomean_B0, mu_mean_B0, u2u1mean_B0,
-                                  TT_mean_B0, rhou1u1mean_B0, u0mean_B0, u1mean_B0, D11_B0, HDF5_timing);
+  // HDF5_IO_Write_1_opensbliblock00(opensbliblock00, rho_B0, rhou0_B0, rhou1_B0, rhou2_B0, rhoE_B0, x0_B0, x1_B0,
+  // x2_B0,
+  //                                 D11_B0, HDF5_timing);
+  // HDF5_IO_Write_0_opensbliblock00(opensbliblock00, u2u2mean_B0, rhou2mean_B0, rhou2u1mean_B0, u0u0mean_B0,
+  //                                 rhou1u0mean_B0, E_mean_B0, u1u0mean_B0, u1u1mean_B0, rhou2u0mean_B0, rhou0mean_B0,
+  //                                 rhou1mean_B0, pp_mean_B0, rhou2u2mean_B0, u2mean_B0, M_mean_B0, u2u0mean_B0,
+  //                                 p_mean_B0, a_mean_B0, T_mean_B0, rhou0u0mean_B0, rhomean_B0, mu_mean_B0,
+  //                                 u2u1mean_B0, TT_mean_B0, rhou1u1mean_B0, u0mean_B0, u1mean_B0, D11_B0,
+  //                                 HDF5_timing);
   ops_exit();
   // Main program end
 }

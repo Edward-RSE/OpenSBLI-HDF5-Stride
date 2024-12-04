@@ -48,7 +48,16 @@ void restrict_kernel(const ACC<double> &original_dat, ACC<double> &strided_dat, 
  */
 void copy_to_strided_dat(ops_block block, int block0np0, int block0np1, int block0np2, int stride[],
                          ops_dat &original_dat, ops_dat &strided_dat) {
-  int iter_range[] = {0, block0np0 / stride[0], 0, block0np1 / stride[1], block0np2 / 2, block0np2 / 2 + 1};
+  int iter_range[] = {0, block0np0 / stride[0], 0, block0np1 / stride[1], 0, block0np2 / stride[2]};
+
+  ops_printf("%s:block0np0 = %d\n", __func__, block0np0);
+  ops_printf("%s:block0np1 = %d\n", __func__, block0np1);
+  ops_printf("%s:block0np2 = %d\n", __func__, block0np2);
+  ops_printf("%s:iter_range = ", __func__);
+  for (int i = 0; i < 6; i++) {
+    ops_printf("%d ", iter_range[i]);
+  }
+  ops_printf("\n");
   /*
    * Use a parallel loop to copy data from the original to the smaller data
    * set. The important thing here is that we are looping over the smaller
@@ -113,23 +122,39 @@ void HDF5_IO_Init_0_opensbliblock00_strided(ops_block block, int block0np0, int 
  * @param stride  The strided of the output datasets
  * @param rho_B0  The first dataset to write
  */
-void HDF5_IO_Write_0_opensbliblock00_strided(char name[], ops_block block, int block0np0, int block0np1, int block0np2,
-                                             int stride[], ops_dat &rho_B0) {
+void HDF5_IO_Write_0_opensbliblock00_slab(char name[], ops_block block, int block0np0, int block0np1, int block0np2,
+                                          int stride[], ops_dat &rho_B0) {
   double cpu_start0;
   double cpu_end0;
   double elapsed_start0;
   double elapsed_end0;
+  char slab_name[80];
+  char output_name[80] = "opensbli_output-slab_strided.h5";
+  int slab_range[] = {0, block0np2, 0, block0np1, 0, block0np0};
+
+  ops_printf("%s:block0np0 = %d\n", __func__, block0np0);
+  ops_printf("%s:block0np1 = %d\n", __func__, block0np1);
+  ops_printf("%s:block0np2 = %d\n", __func__, block0np2);
+  ops_printf("%s:slab_range = ", __func__);
+  for (int i = 0; i < 6; i++) {
+    ops_printf("%d ", slab_range[i]);
+  }
+  ops_printf("\n");
 
   ops_timers(&cpu_start0, &elapsed_start0);
 
   /* Copy data to strided datasets */
-  copy_to_strided_dat(block, block0np0, block0np1, block0np2, stride, rho_B0, rho_B0_strided);
+  // copy_to_strided_dat(block, block0np0, block0np1, block0np2, stride, rho_B0, rho_B0_strided);
+  // ops_printf("rho_B0->size = %d %d %d\n", rho_B0->size[0], rho_B0->size[1], rho_B0->size[2]);
+  // ops_printf("rho_B0_strided->size = %d %d %d\n", rho_B0_strided->size[0], rho_B0_strided->size[1],
+  //            rho_B0_strided->size[2]);
 
   /* Write to disk, using the standard HDF5 API */
-  ops_write_plane_group_hdf5({{2, block0np2 / 2}}, name, {{rho_B0_strided}});
+  snprintf(slab_name, 80, "%s/rho_B0", name);
+  ops_write_data_slab_hdf5(rho_B0, slab_range, output_name, slab_name);
 
   ops_timers(&cpu_end0, &elapsed_end0);
   ops_printf("-----------------------------------------\n");
-  ops_printf("Time to write strided HDF5 file: %s: %lf\n", name, elapsed_end0 - elapsed_start0);
+  ops_printf("Time to write HDF5 slab: %s: %lf\n", name, elapsed_end0 - elapsed_start0);
   ops_printf("-----------------------------------------\n");
 }
