@@ -62,9 +62,8 @@ int halo_p[] = {5, 5};
 int halo_m[] = {-5, -5};
 int size[] = {block0np0, block0np1};
 int base[] = {0, 0};
-double* value = NULL;
-int stride[2] = {1, 1};
-rho_B0 = ops_decl_dat(opensbliblock00, 1, size, base, halo_m, halo_p, stride, value, "double", "rho_B0");
+double *value = NULL;
+rho_B0 = ops_decl_dat(opensbliblock00, 1, size, base, halo_m, halo_p, value, "double", "rho_B0");
 }
 }
 ops_dat rho_RKold_B0;
