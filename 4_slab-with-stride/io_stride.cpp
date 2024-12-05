@@ -46,18 +46,7 @@ void restrict_kernel(const ACC<double> &original_dat, ACC<double> &strided_dat, 
  * because they will all have the same interation range and the same stencils.
  *
  */
-void copy_to_strided_dat(ops_block block, int block0np0, int block0np1, int block0np2, int stride[],
-                         ops_dat &original_dat, ops_dat &strided_dat) {
-  int iter_range[] = {0, block0np0 / stride[0], 0, block0np1 / stride[1], 0, block0np2 / stride[2]};
-
-  ops_printf("%s:block0np0 = %d\n", __func__, block0np0);
-  ops_printf("%s:block0np1 = %d\n", __func__, block0np1);
-  ops_printf("%s:block0np2 = %d\n", __func__, block0np2);
-  ops_printf("%s:iter_range = ", __func__);
-  for (int i = 0; i < 6; i++) {
-    ops_printf("%d ", iter_range[i]);
-  }
-  ops_printf("\n");
+void copy_to_strided_dat(ops_block block, int iter_range[], ops_dat &original_dat, ops_dat &strided_dat) {
   /*
    * Use a parallel loop to copy data from the original to the smaller data
    * set. The important thing here is that we are looping over the smaller
@@ -66,8 +55,7 @@ void copy_to_strided_dat(ops_block block, int block0np0, int block0np1, int bloc
    */
   ops_par_loop(restrict_kernel, "restrict_kernel", block, 3, iter_range,
                ops_arg_dat(original_dat, 1, stencil2d_restrict_00, "double", OPS_READ),
-               ops_arg_dat(strided_dat, 1, stencil2d_00, "double", OPS_WRITE),
-               ops_arg_idx());
+               ops_arg_dat(strided_dat, 1, stencil2d_00, "double", OPS_WRITE), ops_arg_idx());
 }
 
 /**
@@ -128,28 +116,22 @@ void HDF5_IO_Write_0_opensbliblock00_slab(char name[], ops_block block, int bloc
   double cpu_end0;
   double elapsed_start0;
   double elapsed_end0;
-  char slab_name[80];
   char output_name[80] = "opensbli_output-slab_strided.h5";
-  int slab_range[] = {0, block0np0, 0, block0np1, 0, block0np2};
 
-  ops_printf("%s:block0np0 = %d\n", __func__, block0np0);
-  ops_printf("%s:block0np1 = %d\n", __func__, block0np1);
-  ops_printf("%s:block0np2 = %d\n", __func__, block0np2);
-  ops_printf("%s:slab_range = ", __func__);
-  for (int i = 0; i < 6; i++) {
-    ops_printf("%d ", slab_range[i]);
-  }
-  ops_printf("\n");
+  /* Declare slab range */
+  const int offset0 = 40;
+  const int offset1 = 40;
+  const int offset2 = 10;
+  int slab_range[] = {(block0np0 / 2) - offset0, (block0np0 / 2) + offset0, (block0np1 / 2) - offset1,
+                      (block0np1 / 2) + offset1, (block0np2 / 2) - offset2, (block0np2 / 2) + offset2};
 
   ops_timers(&cpu_start0, &elapsed_start0);
 
   /* Copy data to strided datasets */
-  copy_to_strided_dat(block, block0np0, block0np1, block0np2, stride, rho_B0, rho_B0_strided);
-  ops_printf("rho_B0->size = %d %d %d\n", rho_B0->size[0], rho_B0->size[1], rho_B0->size[2]);
-  ops_printf("rho_B0_strided->size = %d %d %d\n", rho_B0_strided->size[0], rho_B0_strided->size[1],
-             rho_B0_strided->size[2]);
+  copy_to_strided_dat(block, slab_range, rho_B0, rho_B0_strided);
 
   /* Write to disk, using the standard HDF5 API */
+  char slab_name[80];
   snprintf(slab_name, 80, "%s/rho_B0", name);
   ops_write_data_slab_hdf5(rho_B0_strided, slab_range, output_name, slab_name);
 

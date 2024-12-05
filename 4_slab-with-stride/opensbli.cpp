@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
   Delta0block0 = 6.0 / block0np0;
   Delta1block0 = 2.0 / (block0np1 - 1);
   Delta2block0 = 3.0 / block0np2;
-  niter = 4;
+  niter = 1;
   double rkB[] = {0.149659021999300, 0.379210312999900, 0.822955029386900, 0.699450455948800, 0.153057247968100};
   double rkA[] = {0, -0.417890474500000, -1.19215169464300, -1.69778469247100, -1.51418344425700};
   dt = 0.0001;
@@ -52,8 +52,8 @@ int main(int argc, char **argv) {
   filter_frequency = 25;
   DRP_filt = 0.100000000000000;
   HDF5_timing = 1;
-  write_output_file = 2;
-  write_slices = 2;
+  write_output_file = 1;
+  write_slices = 1;
   inv2Delta0block0 = 1.0 / (Delta0block0 * Delta0block0);
   inv2Delta1block0 = 1.0 / (Delta1block0 * Delta1block0);
   inv2Delta2block0 = 1.0 / (Delta2block0 * Delta2block0);
