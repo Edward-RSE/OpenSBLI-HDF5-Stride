@@ -6,6 +6,9 @@ using striding to writing to disk at specified intervals of the grid -- such as
 every second, fourth or nth grid point -- instead of saving data from every
 grid point.
 
+The implementation is described in `docs/implementation.md` and the code in each
+directory is in `io_stride.cpp`.
+
 ## Building
 
 The code in this repository does not require OpenSBLI, as we will be prototyping
