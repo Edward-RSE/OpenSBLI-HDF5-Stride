@@ -9,6 +9,13 @@ grid point.
 The implementation is described in `docs/implementation.md` and the code in each
 directory is in `io_stride.cpp`.
 
+- `1_stride-manual-copy`: a rough prototype of using `memcpy` which only works
+  with a single process simulation (without MPI).
+- `2_stride-kernel`: an implementation using a parallel kernel
+- `3_slice-with-stride`: an implementation using a parallel kernel with the
+  slice output option
+- `4_slab-with-stride`: as above, but with a slab instead
+
 ## Building
 
 The code in this repository does not require OpenSBLI, as we will be prototyping
