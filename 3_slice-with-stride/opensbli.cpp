@@ -717,22 +717,8 @@ int main(int argc, char **argv) {
     //     }
 
     if (fmod(1 + iter, write_slices) == 0) {
-      char slice_name0[80];
-      sprintf(slice_name0, "%d", iter + 1);
-      double cpu_start0;
-      double cpu_end0;
-      double elapsed_start0;
-      double elapsed_end0;
-
-      ops_timers(&cpu_start0, &elapsed_start0);
-      ops_write_plane_group_hdf5({{2, block0np2 / 2}}, slice_name0, {{rho_B0}});
-      ops_timers(&cpu_end0, &elapsed_end0);
-      ops_printf("-----------------------------------------\n");
-      ops_printf("Time to write strided HDF5 file: %s: %lf\n", slice_name0, elapsed_end0 - elapsed_start0);
-      ops_printf("-----------------------------------------\n");
-
-      // HDF5_IO_Write_0_opensbliblock00_strided(slice_name0, opensbliblock00, block0np0, block0np1, block0np2,
-      //                                         output_stride, rho_B0);
+      HDF5_IO_Write_0_opensbliblock00_strided(slice_name0, opensbliblock00, block0np0, block0np1, block0np2,
+                                              output_stride, rho_B0);
     }
 
     if (fmod(1 + iter, write_slices) == 0) {
