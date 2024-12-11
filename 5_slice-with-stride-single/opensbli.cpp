@@ -19,10 +19,10 @@ int main(int argc, char **argv) {
   // Set restart to 1 to restart the simulation from HDF5 file
   restart = 0;
   // User defined constant values
-  block0np0 = 360;
-  block0np1 = 355;
-  block0np2 = 300;
-  int output_stride[] = {5, 5, 1};
+  block0np0 = 180;
+  block0np1 = 190;
+  block0np2 = 150;
+  int output_stride[] = {2, 2, 1};
   Delta0block0 = 6.0 / block0np0;
   Delta1block0 = 2.0 / (block0np1 - 1);
   Delta2block0 = 3.0 / block0np2;
