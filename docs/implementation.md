@@ -21,8 +21,7 @@ is already in OPS, and it also means that everything is parallelised "for free" 
 ourselves.
 
 **We are taking this approach because the `stride` parameter in the HDF5 hyperslab implementation in OPS results in
-blank points, rather than those points not being written. The use of hyperslabs also seems to be only implemented for
-the slice output functions, so using the `stride` parameter here would not be generic across the board.**
+blank points, rather than those points not being written.**
 
 ## Datasets and Stencils
 
@@ -107,6 +106,27 @@ void restrict_kernel(const ACC<double> &original_dat, ACC<double> &strided_dat, 
 }
 ```
 
+## Single precision data
+
+For further savings, it is possible to use a static cast in a kernel to convert from double to single precision, i.e.
+from `double` to `float`. The key changes required to do this are to declare the strided `ops_dat` with a data type
+of `float` and to update the `ops_par_loop` and arguments for `restrict_kernel` to use `float` instead of `double`.
+
+In the example below, the elements from `original_dat` are statically cast from `double` to `float` in the kernel, with
+`strided_dat` now being of type `ACC<float>`. The corresponding argument in `ops_par_loop` has also been updated to
+use `"float"` instead of `"double"` in `ops_arg_dat`.
+
+```c
+void restrict_kernel(const ACC<double> &original_dat, ACC<float> &strided_dat, const int *idx) {
+  strided_dat(0, 0) = (float)original_dat(0, 0);
+}
+
+ops_par_loop(restrict_kernel, "restrict_kernel", block, 2, iter_range,
+              ops_arg_dat(original_dat, 1, stencil2d_restrict_00, "double", OPS_READ),
+              ops_arg_dat(strided_dat, 1, stencil2d_00, "float", OPS_WRITE),
+              ops_arg_idx());
+```
+
 ## How to use a strided dataset with the HDF5 API
 
 Since the strided dataset is an `ops_dat`, it can be used with any of the OPS HDF5 functions. When using the slab and
@@ -119,6 +139,36 @@ ops_fetch_dat_hdf5_file(rho_B0_strided, name);
 /*  Write a slice of the dataset */
 ops_write_plane_group_hdf5({{2, (block0np2 / stride) / 2 }}, name, {{rho_B0_strided}});
 /* And so on... */
+```
+
+## Usage
+
+The implementation is currently in a file named `io_stride.cpp` with two user-facing functions:
+
+- `HDF5_IO_Init_0_opensbliblock00_strided`: initialises the datasets and stencils for strided output
+- `HDF5_IO_Write_0_opensbliblock00_strided`: populates the datasets and writes them to disk
+
+The other functions and variables in `io_stride.cpp` are designed to be hidden away from the user. However, there is no
+reason why they should be other than to hide away complication in the main function. The init function has to be called
+before `ops_partition`, otherwise OPS will not be able to distribute data across MPI ranks and will exit.
+
+```c
+/* Initialisation only requires the block, block dimensions and the stride parameters.
+   The strided datasets are in `io_stride.cpp` and don't need to be declared in scope of
+   the main function in this implementation */
+
+int output_stride = {2, 2};
+HDF5_IO_Init_0_opensbliblock00_strided(opensbliblock00, block0np0, block0np1, output_stride);
+
+/* Other initialisation code goes here */
+
+ops_partition("");
+
+/* To write strided output, just call this function with the correct arguments.
+   rho_B0 is the ops_dat for the density field which will be transformed into a
+   strided dataset and written to disk */
+
+HDF5_IO_Write_0_opensbliblock00_strided(opensbliblock00, block0np0, block0np1, output_stride, &rho_B0)
 ```
 
 ## Limitations
