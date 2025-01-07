@@ -37,11 +37,6 @@ def main(args):
     variable_slab_2d = numpy.array(
         strided_dat["opensbliblock00"][f"{n_iter}"][f"{variable}"][:, :, :]
     )
-    # variable_slab_2d = numpy.array(
-    #     strided_dat["opensbliblock00"][f"{variable}_strided"][
-    #         halo_n:-halo_p, halo_n:-halo_p, halo_n:-halo_p
-    #     ]
-    # )
 
     offset0 = 40
     offset1 = 40
@@ -64,19 +59,6 @@ def main(args):
     variable_original_slice = variable_original_slice[
         :: args.stride_k, :: args.stride_j, :: args.stride_i
     ]
-
-    # end0_mod = start0 + int(offset2 * 2 / args.stride_k)
-    # end1_mod = start1 + int(offset1 * 2 / args.stride_j)
-    # end2_mod = start2 + int(offset0 * 2 / args.stride_i)
-
-    # print(start0, end0_mod, start1, end1_mod, start2, end2_mod)
-
-    # variable_slab_2d = variable_slab_2d[
-    #     start0:end0_mod, start1:end1_mod, start2:end2_mod
-    # ]
-    # variable_slab_2d = variable_slab_2d[
-    #     :: args.stride_k, :: args.stride_j, :: args.stride_i
-    # ]
 
     print(f"Slab range: ({start0}, {end0}) ({start1}, {end1}) ({start2}, {end2})")
     print(

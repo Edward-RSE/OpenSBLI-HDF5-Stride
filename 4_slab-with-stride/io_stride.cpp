@@ -134,27 +134,19 @@ void HDF5_IO_Write_0_opensbliblock00_slab(char name[], ops_block block, int bloc
   /* These are the coordinates of the slab we want to create */
   int slab_range[] = {X - offset0, X + offset0, Y - offset1, Y + offset1, Z - offset2, Z + offset2};
 
-  /*
-   * These are the coordinates of the strided slab we want to create - this needs
-   * to be used in the parallel loop to copy data in conjuction with the strided
-   * stencil
-   */
-  int stride_range[] = {slab_range[0], slab_range[0] + (slab_range[1] - slab_range[0]) / stride[0],
-                        slab_range[2], slab_range[2] + (slab_range[3] - slab_range[2]) / stride[1],
-                        slab_range[4], slab_range[4] + (slab_range[5] - slab_range[4]) / stride[2]};
-
   ops_timers(&cpu_start0, &elapsed_start0);
 
   /* Copy data to strided datasets */
   int iter_range[] = {0, block0np0 / stride[0], 0, block0np1 / stride[1], 0, block0np2 / stride[2]};
   copy_to_strided_dat(block, iter_range, rho_B0, rho_B0_strided);
 
-  /* Write to disk, using the standard HDF5 API */
+  /*
+   * Write to disk, using the standard HDF5 API to write a slab of the strided
+   * dataset
+   */
   char slab_name[80];
   snprintf(slab_name, 80, "%s/rho_B0", name);
   ops_write_data_slab_hdf5(rho_B0_strided, slab_range, output_name, slab_name);
-  // ops_fetch_block_hdf5_file(block, output_name);
-  // ops_fetch_dat_hdf5_file(rho_B0_strided, output_name);
 
   ops_timers(&cpu_end0, &elapsed_end0);
   ops_printf("-----------------------------------------\n");
