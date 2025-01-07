@@ -34,8 +34,13 @@ def main(args):
             halo_n:-halo_p, halo_n:-halo_p, halo_n:-halo_p
         ]
     )
+    # variable_slab_2d = numpy.array(
+    #     strided_dat["opensbliblock00"][f"{n_iter}"][f"{variable}"][:, :, :]
+    # )
     variable_slab_2d = numpy.array(
-        strided_dat["opensbliblock00"][f"{n_iter}"][f"{variable}"][:, :, :]
+        strided_dat["opensbliblock00"][f"{variable}_strided"][
+            halo_n:-halo_p, halo_n:-halo_p, halo_n:-halo_p
+        ]
     )
 
     offset0 = 40
@@ -52,19 +57,14 @@ def main(args):
     start2 = int((block0np0 / 2) - offset0)
     end2 = int((block0np0 / 2) + offset0)
 
-    # start0 = 0
-    # end0 = block0np2
-    # start1 = 0
-    # end1 = block0np1
-    # start2 = 0
-    # end2 = block0np0
-
     variable_original_slice = variable_original[start0:end0, start1:end1, start2:end2]
     variable_original_slice = variable_original_slice[
-        :: args.stride_i, :: args.stride_j, :: args.stride_k
+        :: args.stride_k, :: args.stride_j, :: args.stride_i
     ]
 
-    print("Slab range:", start0, end0, start1, end1, start2, end2)
+    variable_slab_2d = variable_slab_2d[start0:end0, start1:end1, start2:end2]
+
+    print(f"Slab range: ({start0}, {end0}) ({start1}, {end1}) ({start2}, {end2})")
     print(
         args.original_data,
         "before slice",
@@ -97,7 +97,9 @@ def main(args):
         # Absolute difference between the original grid and the grid sliced in
         # numpy to create a slab
         diff = (
-            variable_original[k + start0, start1:end1, start2:end2]
+            variable_original[
+                k + start0, start1 : end1 : args.stride_j, start2 : end2 : args.stride_k
+            ]
             - variable_original_slice[k, :, :]
         )
         ax[4].imshow(diff)
