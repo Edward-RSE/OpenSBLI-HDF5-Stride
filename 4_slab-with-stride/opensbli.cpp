@@ -22,7 +22,7 @@ int main(int argc, char **argv) {
   block0np0 = 180;
   block0np1 = 175;
   block0np2 = 150;
-  int output_stride[] = {1, 1, 1};
+  int output_stride[] = {2, 2, 2};
   Delta0block0 = 6.0 / block0np0;
   Delta1block0 = 2.0 / (block0np1 - 1);
   Delta2block0 = 3.0 / block0np2;

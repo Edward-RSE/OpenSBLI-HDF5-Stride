@@ -76,15 +76,6 @@ void copy_to_strided_dat(ops_block block, int iter_range[], ops_dat &original_da
 void HDF5_IO_Init_0_opensbliblock00_strided(ops_block block, int block0np0, int block0np1, int block0np2,
                                             int stride[]) {
   /*
-   * Declare the slab range and size, following logic described in the comment
-   * around line 130 in `HDF5_IO_Write_0_opensbliblock00_slab`.
-   */
-  const int offset0 = 40;
-  const int offset1 = 40;
-  const int offset2 = 10;
-  int slab_size[] = {2 * offset0, 2 * offset1, 2 * offset2};
-
-  /*
    * Determine the size of the strided datasets. We have some halo cells, but we
    * don't actually need them if we don't want them.
    */
@@ -133,12 +124,12 @@ void HDF5_IO_Write_0_opensbliblock00_slab(char name[], ops_block block, int bloc
    * to) that the slab will start at some point X - offset and will span to
    * X + offset where X is some arbitrary point to define the slab.
    */
-  const int offset0 = 40;
-  const int offset1 = 40;
-  const int offset2 = 10;
-  const int X = block0np0 / 2;
-  const int Y = block0np1 / 2;
-  const int Z = block0np2 / 2;
+  const int offset0 = 20;
+  const int offset1 = 20;
+  const int offset2 = 5;
+  const int X = (block0np0 / stride[0]) / 2;
+  const int Y = (block0np1 / stride[1]) / 2;
+  const int Z = (block0np2 / stride[2]) / 2;
 
   /* These are the coordinates of the slab we want to create */
   int slab_range[] = {X - offset0, X + offset0, Y - offset1, Y + offset1, Z - offset2, Z + offset2};
@@ -148,23 +139,22 @@ void HDF5_IO_Write_0_opensbliblock00_slab(char name[], ops_block block, int bloc
    * to be used in the parallel loop to copy data in conjuction with the strided
    * stencil
    */
-  int stride_range[] = {slab_range[0], slab_range[1] / stride[0], slab_range[2], slab_range[3] / stride[1],
-                        slab_range[4], slab_range[5] / stride[2]};
-
-  /* Not sure if required */
-  // int output_range[] = {0, 2 * offset0 / stride[0], 0, 2 * offset1 / stride[1], 0, 2 * offset2 / stride[2]};
+  int stride_range[] = {slab_range[0], slab_range[0] + (slab_range[1] - slab_range[0]) / stride[0],
+                        slab_range[2], slab_range[2] + (slab_range[3] - slab_range[2]) / stride[1],
+                        slab_range[4], slab_range[4] + (slab_range[5] - slab_range[4]) / stride[2]};
 
   ops_timers(&cpu_start0, &elapsed_start0);
 
   /* Copy data to strided datasets */
-  copy_to_strided_dat(block, stride_range, rho_B0, rho_B0_strided);
+  int iter_range[] = {0, block0np0 / stride[0], 0, block0np1 / stride[1], 0, block0np2 / stride[2]};
+  copy_to_strided_dat(block, iter_range, rho_B0, rho_B0_strided);
 
   /* Write to disk, using the standard HDF5 API */
-  // char slab_name[80];
-  // snprintf(slab_name, 80, "%s/rho_B0", name);
-  // ops_write_data_slab_hdf5(rho_B0_strided, output_range, output_name, slab_name);
-  ops_fetch_block_hdf5_file(block, output_name);
-  ops_fetch_dat_hdf5_file(rho_B0_strided, output_name);
+  char slab_name[80];
+  snprintf(slab_name, 80, "%s/rho_B0", name);
+  ops_write_data_slab_hdf5(rho_B0_strided, slab_range, output_name, slab_name);
+  // ops_fetch_block_hdf5_file(block, output_name);
+  // ops_fetch_dat_hdf5_file(rho_B0_strided, output_name);
 
   ops_timers(&cpu_end0, &elapsed_end0);
   ops_printf("-----------------------------------------\n");

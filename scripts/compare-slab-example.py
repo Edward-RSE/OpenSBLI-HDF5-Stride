@@ -34,14 +34,14 @@ def main(args):
             halo_n:-halo_p, halo_n:-halo_p, halo_n:-halo_p
         ]
     )
-    # variable_slab_2d = numpy.array(
-    #     strided_dat["opensbliblock00"][f"{n_iter}"][f"{variable}"][:, :, :]
-    # )
     variable_slab_2d = numpy.array(
-        strided_dat["opensbliblock00"][f"{variable}_strided"][
-            halo_n:-halo_p, halo_n:-halo_p, halo_n:-halo_p
-        ]
+        strided_dat["opensbliblock00"][f"{n_iter}"][f"{variable}"][:, :, :]
     )
+    # variable_slab_2d = numpy.array(
+    #     strided_dat["opensbliblock00"][f"{variable}_strided"][
+    #         halo_n:-halo_p, halo_n:-halo_p, halo_n:-halo_p
+    #     ]
+    # )
 
     offset0 = 40
     offset1 = 40
@@ -49,20 +49,34 @@ def main(args):
     block0np0 = 180
     block0np1 = 175
     block0np2 = 150
+    X = block0np2 / 2
+    Y = block0np1 / 2
+    Z = block0np0 / 2
 
-    start0 = int((block0np2 / 2) - offset2)
-    end0 = int((block0np2 / 2) + offset2)
-    start1 = int((block0np1 / 2) - offset1)
-    end1 = int((block0np1 / 2) + offset1)
-    start2 = int((block0np0 / 2) - offset0)
-    end2 = int((block0np0 / 2) + offset0)
+    start0 = int(X - offset2)
+    end0 = int(X + offset2)
+    start1 = int(Y - offset1)
+    end1 = int(Y + offset1)
+    start2 = int(Z - offset0)
+    end2 = int(Z + offset0)
 
     variable_original_slice = variable_original[start0:end0, start1:end1, start2:end2]
     variable_original_slice = variable_original_slice[
         :: args.stride_k, :: args.stride_j, :: args.stride_i
     ]
 
-    variable_slab_2d = variable_slab_2d[start0:end0, start1:end1, start2:end2]
+    # end0_mod = start0 + int(offset2 * 2 / args.stride_k)
+    # end1_mod = start1 + int(offset1 * 2 / args.stride_j)
+    # end2_mod = start2 + int(offset0 * 2 / args.stride_i)
+
+    # print(start0, end0_mod, start1, end1_mod, start2, end2_mod)
+
+    # variable_slab_2d = variable_slab_2d[
+    #     start0:end0_mod, start1:end1_mod, start2:end2_mod
+    # ]
+    # variable_slab_2d = variable_slab_2d[
+    #     :: args.stride_k, :: args.stride_j, :: args.stride_i
+    # ]
 
     print(f"Slab range: ({start0}, {end0}) ({start1}, {end1}) ({start2}, {end2})")
     print(
