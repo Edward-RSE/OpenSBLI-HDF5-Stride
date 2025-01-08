@@ -15,7 +15,8 @@
         "**/*.lot": true,
         "**/*.o": true,
         "**/*.synctex.gz": true,
-        "**/*.toc": true
+        "**/*.toc": true,
+        "**/__pycache__": true
     },
     "explorerExclude.backup": {},
     "files.associations": {
