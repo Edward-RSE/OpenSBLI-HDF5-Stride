@@ -46,3 +46,10 @@ another which the regular output methods don't do. So we are doing extra work. T
 changes are made to the OPS HDF5 API. It would require either changing `fetch_loop_slab()` to include a `stride`
 argument and accounting for it in the various loops, or by unifying the HDF5 to use HDF5 Hyperslabs which include a
 stride parameter. Hyperslabs already are used in OPS, but only seem to be present in the MPI API.
+
+Note the slice here is using the stride implementation with a stride of {1 , 1, 1} so it would be faster using the
+intended way to create a slice.
+
+Regular 36.67 s
+slice 0.351 s
+slice with stride
