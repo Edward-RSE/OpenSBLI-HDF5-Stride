@@ -1,0 +1,124 @@
+Running SLURM prolog script on rose01
+===============================================================================
+Job started on Wed Jan  8 17:53:21 GMT 2025
+Job ID          : 66328
+Job name        : submit-benchmark.sh
+WorkDir         : /iridisfs/scratch/ejp1v21/6_benchmark
+Command         : /iridisfs/scratch/ejp1v21/6_benchmark/submit-benchmark.sh
+Partition       : scavenger_mathsa100
+Num hosts       : 1
+Num cores       : 48
+Num of tasks    : 2
+Hosts allocated : rose01
+Job Output Follows ...
+===============================================================================
+
+Currently Loaded Modules:
+  1) nvhpc/24.5      3) binutils/2.42   5) cmake/3.30.0
+  2) conda/python3   4) gcc/13.3.0
+
+ 
+
+Wed Jan  8 17:53:24 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 550.54.15              Driver Version: 550.54.15      CUDA Version: 12.4     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A100 80GB PCIe          Off |   00000000:19:00.0 Off |                    0 |
+| N/A   55C    P0             60W /  300W |       0MiB /  81920MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA A100 80GB PCIe          Off |   00000000:1C:00.0 Off |                    0 |
+| N/A   34C    P0             52W /  300W |       0MiB /  81920MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+ Using CUDA device: 1 NVIDIA A100 80GB PCIe
+
+ Using CUDA device: 0 NVIDIA A100 80GB PCIe
+block "opensbliblock00" decomposed on to a processor grid of 2 x 1 x 1  
+Finished block decomposition
+-----------------------------------------
+ MPI partition and reading input file time: 5.138494
+ -----------------------------------------
+[1;32mOpenSBLI is starting from the initial condition.
+[0m-----------------------------------------
+Time to write HDF5 file: opensbli_output_000001.h5: 36.388716
+-----------------------------------------
+-----------------------------------------
+Time to write strided HDF5 file: 1: 0.320384
+-----------------------------------------
+-----------------------------------------
+Time to write slice HDF5 file: 0.011836
+-----------------------------------------
+-----------------------------------------
+Time to write HDF5 file: opensbli_output_000002.h5: 33.087403
+-----------------------------------------
+-----------------------------------------
+Time to write strided HDF5 file: 2: 0.128699
+-----------------------------------------
+-----------------------------------------
+Time to write slice HDF5 file: 0.019910
+-----------------------------------------
+
+Timings are:
+-----------------------------------------
+Total Wall time 74.954359
+-----------------------------------------
+Time to write HDF5 file: opensbli_output.h5: 5.152997
+-----------------------------------------
+
+real	1m29.160s
+user	0m48.251s
+sys	1m29.067s
+total 31G
+-rw-r--r-- 1 ejp1v21 245 4.3K Jan  8 17:54 slurm-66328.out
+-rw-r--r-- 1 ejp1v21 245 1.7G Jan  8 17:54 opensbli_output.h5
+-rw-r--r-- 1 ejp1v21 245  31M Jan  8 17:54 J590.h5
+-rw-r--r-- 1 ejp1v21 245  31M Jan  8 17:54 J20.h5
+-rw-r--r-- 1 ejp1v21 245 6.1M Jan  8 17:54 K260.h5
+-rw-r--r-- 1 ejp1v21 245 254K Jan  8 17:54 K261.h5
+-rw-r--r-- 1 ejp1v21 245  15G Jan  8 17:54 opensbli_output_000002.h5
+-rw-r--r-- 1 ejp1v21 245  15G Jan  8 17:54 opensbli_output_000001.h5
+-rwxr-xr-x 1 ejp1v21 245  376 Jan  8 15:29 submit-benchmark.sh
+drwxr-xr-x 4 ejp1v21 245 4.0K Jan  8 15:09 build
+-rw-r--r-- 1 ejp1v21 245 5.4K Jan  8 14:58 stencils.h
+-rw-r--r-- 1 ejp1v21 245 351K Jan  8 14:58 opensbliblock00_kernels.h
+-rw-r--r-- 1 ejp1v21 245  54K Jan  8 14:58 opensbli.cpp
+-rw-r--r-- 1 ejp1v21 245 5.1K Jan  8 14:58 io_stride.cpp
+-rw-r--r-- 1 ejp1v21 245 8.7K Jan  8 14:58 io.h
+-rw-r--r-- 1 ejp1v21 245  21K Jan  8 14:58 defdec_data_set.h
+-rw-r--r-- 1 ejp1v21 245  960 Jan  8 14:58 constants.h
+-rwxr-xr-x 1 ejp1v21 245  434 Jan  8 14:58 build.sh
+-rw-r--r-- 1 ejp1v21 245  14K Jan  8 14:58 bc_exchanges.h
+-rw-r--r-- 1 ejp1v21 245  43K Jan  8 14:58 CMakeLists.txt
+==============================================================================
+Running epilogue script on rose01.
+
+Submit time  : 2025-01-08T15:30:02
+Start time   : 2025-01-08T17:53:20
+End time     : 2025-01-08T17:54:54
+Elapsed time : 00:01:34 (Timelimit=00:10:00)
+
+Job ID: 66328
+Cluster: iridis_x
+User/Group: ejp1v21/
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 48
+CPU Utilized: 00:02:19
+CPU Efficiency: 3.08% of 01:15:12 core-walltime
+Job Wall-clock time: 00:01:34
+Memory Utilized: 19.79 GB
+Memory Efficiency: 11.11% of 178.12 GB

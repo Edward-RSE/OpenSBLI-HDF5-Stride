@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #SBATCH --partition=scavenger_mathsa100
-#SBATCH --time=01:00:00
+#SBATCH --time=00:10:00
 #SBATCH --nodes=1
 #SBATCH --ntasks=2
 #SBATCH --gres=gpu:2

@@ -1,0 +1,259 @@
+Running SLURM prolog script on rose01
+===============================================================================
+Job started on Fri Jan 10 10:18:07 GMT 2025
+Job ID          : 66820
+Job name        : submit-benchmark.sh
+WorkDir         : /iridisfs/scratch/ejp1v21/6_benchmark
+Command         : /iridisfs/scratch/ejp1v21/6_benchmark/submit-benchmark.sh
+Partition       : scavenger_mathsa100
+Num hosts       : 1
+Num cores       : 48
+Num of tasks    : 2
+Hosts allocated : rose01
+Job Output Follows ...
+===============================================================================
+
+Currently Loaded Modules:
+  1) nvhpc/24.5      3) binutils/2.42   5) cmake/3.30.0
+  2) conda/python3   4) gcc/13.3.0
+
+ 
+
+Fri Jan 10 10:18:09 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 550.54.15              Driver Version: 550.54.15      CUDA Version: 12.4     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A100 80GB PCIe          Off |   00000000:19:00.0 Off |                    0 |
+| N/A   35C    P0             53W /  300W |       0MiB /  81920MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA A100 80GB PCIe          Off |   00000000:1C:00.0 Off |                    0 |
+| N/A   35C    P0             53W /  300W |       0MiB /  81920MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+ Using CUDA device: 1 NVIDIA A100 80GB PCIe
+
+ Using CUDA device: 0 NVIDIA A100 80GB PCIe
+block "opensbliblock00" decomposed on to a processor grid of 2 x 1 x 1  
+Finished block decomposition
+-----------------------------------------
+ MPI partition and reading input file time: 5.139728
+ -----------------------------------------
+[1;32mOpenSBLI is starting from the initial condition.
+[0m-----------------------------------------
+Time to write HDF5 file: opensbli_output_000001.h5: 36.443985
+-----------------------------------------
+-----------------------------------------
+Time to write strided HDF5 file: 1: 0.252012
+-----------------------------------------
+-----------------------------------------
+Time to write slice HDF5 file: 0.010451
+-----------------------------------------
+-----------------------------------------
+Time to write HDF5 file: opensbli_output_000002.h5: 28.991721
+-----------------------------------------
+-----------------------------------------
+Time to write strided HDF5 file: 2: 0.117784
+-----------------------------------------
+-----------------------------------------
+Time to write slice HDF5 file: 0.193511
+-----------------------------------------
+-----------------------------------------
+Time to write HDF5 file: opensbli_output_000003.h5: 30.123928
+-----------------------------------------
+-----------------------------------------
+Time to write strided HDF5 file: 3: 0.114416
+-----------------------------------------
+-----------------------------------------
+Time to write slice HDF5 file: 0.010826
+-----------------------------------------
+-----------------------------------------
+Time to write HDF5 file: opensbli_output_000004.h5: 34.280926
+-----------------------------------------
+-----------------------------------------
+Time to write strided HDF5 file: 4: 0.249096
+-----------------------------------------
+-----------------------------------------
+Time to write slice HDF5 file: 0.022649
+-----------------------------------------
+-----------------------------------------
+Time to write HDF5 file: opensbli_output_000005.h5: 29.407287
+-----------------------------------------
+-----------------------------------------
+Time to write strided HDF5 file: 5: 0.119756
+-----------------------------------------
+-----------------------------------------
+Time to write slice HDF5 file: 0.015838
+-----------------------------------------
+-----------------------------------------
+Time to write HDF5 file: opensbli_output_000006.h5: 31.183021
+-----------------------------------------
+-----------------------------------------
+Time to write strided HDF5 file: 6: 0.252889
+-----------------------------------------
+-----------------------------------------
+Time to write slice HDF5 file: 0.029149
+-----------------------------------------
+-----------------------------------------
+Time to write HDF5 file: opensbli_output_000007.h5: 34.619455
+-----------------------------------------
+-----------------------------------------
+Time to write strided HDF5 file: 7: 0.117643
+-----------------------------------------
+-----------------------------------------
+Time to write slice HDF5 file: 0.022303
+-----------------------------------------
+-----------------------------------------
+Time to write HDF5 file: opensbli_output_000008.h5: 27.550667
+-----------------------------------------
+-----------------------------------------
+Time to write strided HDF5 file: 8: 0.201056
+-----------------------------------------
+-----------------------------------------
+Time to write slice HDF5 file: 0.023147
+-----------------------------------------
+-----------------------------------------
+Time to write HDF5 file: opensbli_output_000009.h5: 32.525266
+-----------------------------------------
+-----------------------------------------
+Time to write strided HDF5 file: 9: 0.121900
+-----------------------------------------
+-----------------------------------------
+Time to write slice HDF5 file: 0.012371
+-----------------------------------------
+-----------------------------------------
+Time to write HDF5 file: opensbli_output_000010.h5: 31.385466
+-----------------------------------------
+-----------------------------------------
+Time to write strided HDF5 file: 10: 0.153334
+-----------------------------------------
+-----------------------------------------
+Time to write slice HDF5 file: 0.027790
+-----------------------------------------
+-----------------------------------------
+Time to write HDF5 file: opensbli_output_000011.h5: 31.222038
+-----------------------------------------
+-----------------------------------------
+Time to write strided HDF5 file: 11: 0.235060
+-----------------------------------------
+-----------------------------------------
+Time to write slice HDF5 file: 0.355932
+-----------------------------------------
+-----------------------------------------
+Time to write HDF5 file: opensbli_output_000012.h5: 39.502223
+-----------------------------------------
+-----------------------------------------
+Time to write strided HDF5 file: 12: 0.141444
+-----------------------------------------
+-----------------------------------------
+Time to write slice HDF5 file: 0.566525
+-----------------------------------------
+-----------------------------------------
+Time to write HDF5 file: opensbli_output_000013.h5: 36.138127
+-----------------------------------------
+-----------------------------------------
+Time to write strided HDF5 file: 13: 0.244952
+-----------------------------------------
+-----------------------------------------
+Time to write slice HDF5 file: 0.017316
+-----------------------------------------
+-----------------------------------------
+Time to write HDF5 file: opensbli_output_000014.h5: 30.138049
+-----------------------------------------
+-----------------------------------------
+Time to write strided HDF5 file: 14: 0.233760
+-----------------------------------------
+-----------------------------------------
+Time to write slice HDF5 file: 0.028889
+-----------------------------------------
+-----------------------------------------
+Time to write HDF5 file: opensbli_output_000015.h5: 37.411077
+-----------------------------------------
+-----------------------------------------
+Time to write strided HDF5 file: 15: 0.111905
+-----------------------------------------
+-----------------------------------------
+Time to write slice HDF5 file: 0.037309
+-----------------------------------------
+
+Timings are:
+-----------------------------------------
+Total Wall time 539.533162
+-----------------------------------------
+Time to write HDF5 file: opensbli_output.h5: 3.455383
+-----------------------------------------
+
+real	9m10.988s
+user	4m41.120s
+sys	9m2.836s
+total 221G
+-rw-r--r-- 1 ejp1v21 245 9.3K Jan 10 10:27 slurm-66820.out
+-rw-r--r-- 1 ejp1v21 245 1.7G Jan 10 10:27 opensbli_output.h5
+-rw-r--r-- 1 ejp1v21 245 233M Jan 10 10:27 J590.h5
+-rw-r--r-- 1 ejp1v21 245 233M Jan 10 10:27 J20.h5
+-rw-r--r-- 1 ejp1v21 245  46M Jan 10 10:27 K260.h5
+-rw-r--r-- 1 ejp1v21 245 1.9M Jan 10 10:27 K261.h5
+-rw-r--r-- 1 ejp1v21 245  15G Jan 10 10:27 opensbli_output_000015.h5
+-rw-r--r-- 1 ejp1v21 245  15G Jan 10 10:26 opensbli_output_000014.h5
+-rw-r--r-- 1 ejp1v21 245  15G Jan 10 10:26 opensbli_output_000013.h5
+-rw-r--r-- 1 ejp1v21 245  15G Jan 10 10:25 opensbli_output_000012.h5
+-rw-r--r-- 1 ejp1v21 245  15G Jan 10 10:24 opensbli_output_000011.h5
+-rw-r--r-- 1 ejp1v21 245  15G Jan 10 10:24 opensbli_output_000010.h5
+-rw-r--r-- 1 ejp1v21 245  15G Jan 10 10:23 opensbli_output_000009.h5
+-rw-r--r-- 1 ejp1v21 245  15G Jan 10 10:22 opensbli_output_000008.h5
+-rw-r--r-- 1 ejp1v21 245  15G Jan 10 10:22 opensbli_output_000007.h5
+-rw-r--r-- 1 ejp1v21 245  15G Jan 10 10:21 opensbli_output_000006.h5
+-rw-r--r-- 1 ejp1v21 245  15G Jan 10 10:21 opensbli_output_000005.h5
+-rw-r--r-- 1 ejp1v21 245  15G Jan 10 10:20 opensbli_output_000004.h5
+-rw-r--r-- 1 ejp1v21 245  15G Jan 10 10:20 opensbli_output_000003.h5
+-rw-r--r-- 1 ejp1v21 245  15G Jan 10 10:19 opensbli_output_000002.h5
+-rw-r--r-- 1 ejp1v21 245  15G Jan 10 10:18 opensbli_output_000001.h5
+drwxr-xr-x 4 ejp1v21 245 4.0K Jan 10 10:18 build
+-rw-r--r-- 1 ejp1v21 245 8.7K Jan 10 10:06 io.h
+-rw-r--r-- 1 ejp1v21 245  15K Jan 10 09:49 slurm-66815.out
+-rw-r--r-- 1 ejp1v21 245  15K Jan  9 21:17 slurm-66670.out
+-rw-r--r-- 1 ejp1v21 245  11K Jan  9 20:57 slurm-66492.out
+-rw-r--r-- 1 ejp1v21 245  54K Jan  9 20:55 opensbli.cpp
+-rwxr-xr-x 1 ejp1v21 245  938 Jan  9 11:28 measure-time.py
+-rw-r--r-- 1 ejp1v21 245 5.9K Jan  8 17:55 slurm-66328.out
+-rwxr-xr-x 1 ejp1v21 245  376 Jan  8 15:29 submit-benchmark.sh
+-rw-r--r-- 1 ejp1v21 245 5.4K Jan  8 14:58 stencils.h
+-rw-r--r-- 1 ejp1v21 245 351K Jan  8 14:58 opensbliblock00_kernels.h
+-rw-r--r-- 1 ejp1v21 245 5.1K Jan  8 14:58 io_stride.cpp
+-rw-r--r-- 1 ejp1v21 245  21K Jan  8 14:58 defdec_data_set.h
+-rw-r--r-- 1 ejp1v21 245  960 Jan  8 14:58 constants.h
+-rwxr-xr-x 1 ejp1v21 245  434 Jan  8 14:58 build.sh
+-rw-r--r-- 1 ejp1v21 245  14K Jan  8 14:58 bc_exchanges.h
+-rw-r--r-- 1 ejp1v21 245  43K Jan  8 14:58 CMakeLists.txt
+==============================================================================
+Running epilogue script on rose01.
+
+Submit time  : 2025-01-10T10:18:06
+Start time   : 2025-01-10T10:18:07
+End time     : 2025-01-10T10:27:21
+Elapsed time : 00:09:14 (Timelimit=00:10:00)
+
+Job ID: 66820
+Cluster: iridis_x
+User/Group: ejp1v21/
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 48
+CPU Utilized: 00:13:45
+CPU Efficiency: 3.10% of 07:23:12 core-walltime
+Job Wall-clock time: 00:09:14
+Memory Utilized: 19.80 GB
+Memory Efficiency: 11.12% of 178.12 GB
