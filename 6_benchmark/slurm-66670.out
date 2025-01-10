@@ -1,0 +1,297 @@
+Running SLURM prolog script on rose01
+===============================================================================
+Job started on Thu Jan  9 21:08:51 GMT 2025
+Job ID          : 66670
+Job name        : submit-benchmark.sh
+WorkDir         : /iridisfs/scratch/ejp1v21/6_benchmark
+Command         : /iridisfs/scratch/ejp1v21/6_benchmark/submit-benchmark.sh
+Partition       : scavenger_mathsa100
+Num hosts       : 1
+Num cores       : 48
+Num of tasks    : 2
+Hosts allocated : rose01
+Job Output Follows ...
+===============================================================================
+
+Currently Loaded Modules:
+  1) nvhpc/24.5      3) binutils/2.42   5) cmake/3.30.0
+  2) conda/python3   4) gcc/13.3.0
+
+ 
+
+Thu Jan  9 21:08:54 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 550.54.15              Driver Version: 550.54.15      CUDA Version: 12.4     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A100 80GB PCIe          Off |   00000000:19:00.0 Off |                    0 |
+| N/A   35C    P0             53W /  300W |       0MiB /  81920MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA A100 80GB PCIe          Off |   00000000:1C:00.0 Off |                    0 |
+| N/A   35C    P0             53W /  300W |       0MiB /  81920MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+ Using CUDA device: 1 NVIDIA A100 80GB PCIe
+
+ Using CUDA device: 0 NVIDIA A100 80GB PCIe
+block "opensbliblock00" decomposed on to a processor grid of 2 x 1 x 1  
+Finished block decomposition
+-----------------------------------------
+ MPI partition and reading input file time: 5.138390
+ -----------------------------------------
+[1;32mOpenSBLI is starting from the initial condition.
+[0m-----------------------------------------
+Time to write HDF5 file: opensbli_output_000001.h5: 34.317767
+-----------------------------------------
+-----------------------------------------
+Time to write strided HDF5 file: 1: 0.249280
+-----------------------------------------
+-----------------------------------------
+Time to write slice HDF5 file: 0.009229
+-----------------------------------------
+-----------------------------------------
+Time to write HDF5 file: opensbli_output_000002.h5: 29.721501
+-----------------------------------------
+-----------------------------------------
+Time to write strided HDF5 file: 2: 0.138516
+-----------------------------------------
+-----------------------------------------
+Time to write slice HDF5 file: 0.025894
+-----------------------------------------
+-----------------------------------------
+Time to write HDF5 file: opensbli_output_000003.h5: 33.740477
+-----------------------------------------
+-----------------------------------------
+Time to write strided HDF5 file: 3: 0.117599
+-----------------------------------------
+-----------------------------------------
+Time to write slice HDF5 file: 0.019108
+-----------------------------------------
+-----------------------------------------
+Time to write HDF5 file: opensbli_output_000004.h5: 34.550971
+-----------------------------------------
+-----------------------------------------
+Time to write strided HDF5 file: 4: 0.265469
+-----------------------------------------
+-----------------------------------------
+Time to write slice HDF5 file: 0.028190
+-----------------------------------------
+-----------------------------------------
+Time to write HDF5 file: opensbli_output_000005.h5: 27.899081
+-----------------------------------------
+-----------------------------------------
+Time to write strided HDF5 file: 5: 0.116709
+-----------------------------------------
+-----------------------------------------
+Time to write slice HDF5 file: 0.014215
+-----------------------------------------
+-----------------------------------------
+Time to write HDF5 file: opensbli_output_000006.h5: 32.931018
+-----------------------------------------
+-----------------------------------------
+Time to write strided HDF5 file: 6: 0.246914
+-----------------------------------------
+-----------------------------------------
+Time to write slice HDF5 file: 0.025195
+-----------------------------------------
+-----------------------------------------
+Time to write HDF5 file: opensbli_output_000007.h5: 34.244123
+-----------------------------------------
+-----------------------------------------
+Time to write strided HDF5 file: 7: 0.119863
+-----------------------------------------
+-----------------------------------------
+Time to write slice HDF5 file: 0.023837
+-----------------------------------------
+-----------------------------------------
+Time to write HDF5 file: opensbli_output_000008.h5: 30.574665
+-----------------------------------------
+-----------------------------------------
+Time to write strided HDF5 file: 8: 0.111574
+-----------------------------------------
+-----------------------------------------
+Time to write slice HDF5 file: 0.020554
+-----------------------------------------
+-----------------------------------------
+Time to write HDF5 file: opensbli_output_000009.h5: 27.015846
+-----------------------------------------
+-----------------------------------------
+Time to write strided HDF5 file: 9: 0.238240
+-----------------------------------------
+-----------------------------------------
+Time to write slice HDF5 file: 0.012512
+-----------------------------------------
+-----------------------------------------
+Time to write HDF5 file: opensbli_output_000010.h5: 28.713269
+-----------------------------------------
+-----------------------------------------
+Time to write strided HDF5 file: 10: 0.168614
+-----------------------------------------
+-----------------------------------------
+Time to write slice HDF5 file: 0.029085
+-----------------------------------------
+-----------------------------------------
+Time to write HDF5 file: opensbli_output_000011.h5: 27.186185
+-----------------------------------------
+-----------------------------------------
+Time to write strided HDF5 file: 11: 0.131619
+-----------------------------------------
+-----------------------------------------
+Time to write slice HDF5 file: 0.359467
+-----------------------------------------
+-----------------------------------------
+Time to write HDF5 file: opensbli_output_000012.h5: 32.621995
+-----------------------------------------
+-----------------------------------------
+Time to write strided HDF5 file: 12: 0.240052
+-----------------------------------------
+-----------------------------------------
+Time to write slice HDF5 file: 0.025513
+-----------------------------------------
+-----------------------------------------
+Time to write HDF5 file: opensbli_output_000013.h5: 24.969313
+-----------------------------------------
+-----------------------------------------
+Time to write strided HDF5 file: 13: 0.234748
+-----------------------------------------
+-----------------------------------------
+Time to write slice HDF5 file: 0.027309
+-----------------------------------------
+-----------------------------------------
+Time to write HDF5 file: opensbli_output_000014.h5: 30.905588
+-----------------------------------------
+-----------------------------------------
+Time to write strided HDF5 file: 14: 0.112398
+-----------------------------------------
+-----------------------------------------
+Time to write slice HDF5 file: 0.024395
+-----------------------------------------
+-----------------------------------------
+Time to write HDF5 file: opensbli_output_000015.h5: 35.348072
+-----------------------------------------
+-----------------------------------------
+Time to write strided HDF5 file: 15: 0.239368
+-----------------------------------------
+-----------------------------------------
+Time to write slice HDF5 file: 0.359678
+-----------------------------------------
+
+Timings are:
+-----------------------------------------
+Total Wall time 510.663351
+terminate called after throwing an instance of 'OPSException'
+  what():  Error: Error: ops_fetch_dat_hdf5_file: ops_block on which this ops_dat rho_B0 is declared does not exist in the file
+terminate called after throwing an instance of 'OPSException'
+  what():  Error: Error: ops_fetch_dat_hdf5_file: ops_block on which this ops_dat rho_B0 is declared does not exist in the file
+[rose01:61764] *** Process received signal ***
+[rose01:61764] Signal: Aborted (6)
+[rose01:61764] Signal code:  (-6)
+[rose01:61763] *** Process received signal ***
+[rose01:61763] Signal: Aborted (6)
+[rose01:61763] Signal code:  (-6)
+[rose01:61763] [ 0] /lib64/libpthread.so.0(+0x12cf0)[0x7f97b9454cf0]
+[rose01:61763] [ 1] [rose01:61764] [ 0] /lib64/libpthread.so.0(+0x12cf0)[0x7f5cd27eccf0]
+[rose01:61764] [ 1] /lib64/libc.so.6(gsignal+0x10f)[0x7f97b86c3acf]
+[rose01:61763] [ 2] /lib64/libc.so.6(gsignal+0x10f)[0x7f5cd1a5bacf]
+[rose01:61764] [ 2] /lib64/libc.so.6(abort+0x127)[0x7f97b8696ea5]
+[rose01:61763] [ 3] /lib64/libc.so.6(abort+0x127)[0x7f5cd1a2eea5]
+[rose01:61764] [ 3] /iridisfs/ixsoftware/gcc/13.3.0/install/lib64/libstdc++.so.6(+0xacb4b)[0x7f97b908cb4b]
+[rose01:61763] [ 4] /iridisfs/ixsoftware/gcc/13.3.0/install/lib64/libstdc++.so.6(+0xacb4b)[0x7f5cd2424b4b]
+[rose01:61764] [ 4] /iridisfs/ixsoftware/gcc/13.3.0/install/lib64/libstdc++.so.6(+0xbc2ca)[0x7f97b909c2ca]
+[rose01:61763] [ 5] /iridisfs/ixsoftware/gcc/13.3.0/install/lib64/libstdc++.so.6(+0xbc2ca)[0x7f5cd24342ca]
+[rose01:61764] [ 5] /iridisfs/ixsoftware/gcc/13.3.0/install/lib64/libstdc++.so.6(+0xbc335)[0x7f97b909c335]
+[rose01:61763] [ 6] /iridisfs/ixsoftware/gcc/13.3.0/install/lib64/libstdc++.so.6(+0xbc335)[0x7f5cd2434335]
+[rose01:61764] [ 6] /iridisfs/ixsoftware/gcc/13.3.0/install/lib64/libstdc++.so.6(+0xbc587)[0x7f97b909c587]
+[rose01:61763] [ 7] ./build/slice-example_mpi_cuda[0x40b35f]
+[rose01:61763] [ 8] ./build/slice-example_mpi_cuda[0x489bc9]
+[rose01:61763] [ 9] /iridisfs/ixsoftware/gcc/13.3.0/install/lib64/libstdc++.so.6(+0xbc587)[0x7f5cd2434587]
+[rose01:61764] [ 7] ./build/slice-example_mpi_cuda[0x40b35f]
+[rose01:61764] [ 8] ./build/slice-example_mpi_cuda[0x489bc9]
+[rose01:61764] [ 9] ./build/slice-example_mpi_cuda[0x42294a]
+[rose01:61763] [10] ./build/slice-example_mpi_cuda[0x42294a]
+[rose01:61764] [10] /lib64/libc.so.6(__libc_start_main+0xe5)[0x7f5cd1a47d85]
+[rose01:61764] [11] ./build/slice-example_mpi_cuda[0x4270de]
+[rose01:61764] *** End of error message ***
+/lib64/libc.so.6(__libc_start_main+0xe5)[0x7f97b86afd85]
+[rose01:61763] [11] ./build/slice-example_mpi_cuda[0x4270de]
+[rose01:61763] *** End of error message ***
+--------------------------------------------------------------------------
+Primary job  terminated normally, but 1 process returned
+a non-zero exit code. Per user-direction, the job has been aborted.
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+mpirun noticed that process rank 0 with PID 61763 on node rose01 exited on signal 6 (Aborted).
+--------------------------------------------------------------------------
+
+real	8m39.996s
+user	2m18.321s
+sys	4m25.461s
+total 219G
+-rw-r--r-- 1 ejp1v21 245  13K Jan  9 21:17 slurm-66670.out
+-rw-r--r-- 1 ejp1v21 245  800 Jan  9 21:17 opensbli_output.h5
+-rw-r--r-- 1 ejp1v21 245 233M Jan  9 21:17 J590.h5
+-rw-r--r-- 1 ejp1v21 245 233M Jan  9 21:17 J20.h5
+-rw-r--r-- 1 ejp1v21 245  46M Jan  9 21:17 K260.h5
+-rw-r--r-- 1 ejp1v21 245 1.9M Jan  9 21:17 K261.h5
+-rw-r--r-- 1 ejp1v21 245  15G Jan  9 21:17 opensbli_output_000015.h5
+-rw-r--r-- 1 ejp1v21 245  15G Jan  9 21:16 opensbli_output_000014.h5
+-rw-r--r-- 1 ejp1v21 245  15G Jan  9 21:16 opensbli_output_000013.h5
+-rw-r--r-- 1 ejp1v21 245  15G Jan  9 21:15 opensbli_output_000012.h5
+-rw-r--r-- 1 ejp1v21 245  15G Jan  9 21:15 opensbli_output_000011.h5
+-rw-r--r-- 1 ejp1v21 245  15G Jan  9 21:14 opensbli_output_000010.h5
+-rw-r--r-- 1 ejp1v21 245  15G Jan  9 21:14 opensbli_output_000009.h5
+-rw-r--r-- 1 ejp1v21 245  15G Jan  9 21:13 opensbli_output_000008.h5
+-rw-r--r-- 1 ejp1v21 245  15G Jan  9 21:13 opensbli_output_000007.h5
+-rw-r--r-- 1 ejp1v21 245  15G Jan  9 21:12 opensbli_output_000006.h5
+-rw-r--r-- 1 ejp1v21 245  15G Jan  9 21:11 opensbli_output_000005.h5
+-rw-r--r-- 1 ejp1v21 245  15G Jan  9 21:11 opensbli_output_000004.h5
+-rw-r--r-- 1 ejp1v21 245  15G Jan  9 21:10 opensbli_output_000003.h5
+-rw-r--r-- 1 ejp1v21 245  15G Jan  9 21:10 opensbli_output_000002.h5
+-rw-r--r-- 1 ejp1v21 245  15G Jan  9 21:09 opensbli_output_000001.h5
+drwxr-xr-x 4 ejp1v21 245 4.0K Jan  9 21:08 build
+-rw-r--r-- 1 ejp1v21 245  11K Jan  9 20:57 slurm-66492.out
+-rw-r--r-- 1 ejp1v21 245  54K Jan  9 20:55 opensbli.cpp
+-rw-r--r-- 1 ejp1v21 245 8.7K Jan  9 11:40 io.h
+-rwxr-xr-x 1 ejp1v21 245  938 Jan  9 11:28 measure-time.py
+-rw-r--r-- 1 ejp1v21 245 5.9K Jan  8 17:55 slurm-66328.out
+-rwxr-xr-x 1 ejp1v21 245  376 Jan  8 15:29 submit-benchmark.sh
+-rw-r--r-- 1 ejp1v21 245 5.4K Jan  8 14:58 stencils.h
+-rw-r--r-- 1 ejp1v21 245 351K Jan  8 14:58 opensbliblock00_kernels.h
+-rw-r--r-- 1 ejp1v21 245 5.1K Jan  8 14:58 io_stride.cpp
+-rw-r--r-- 1 ejp1v21 245  21K Jan  8 14:58 defdec_data_set.h
+-rw-r--r-- 1 ejp1v21 245  960 Jan  8 14:58 constants.h
+-rwxr-xr-x 1 ejp1v21 245  434 Jan  8 14:58 build.sh
+-rw-r--r-- 1 ejp1v21 245  14K Jan  8 14:58 bc_exchanges.h
+-rw-r--r-- 1 ejp1v21 245  43K Jan  8 14:58 CMakeLists.txt
+==============================================================================
+Running epilogue script on rose01.
+
+Submit time  : 2025-01-09T21:08:50
+Start time   : 2025-01-09T21:08:51
+End time     : 2025-01-09T21:17:35
+Elapsed time : 00:08:44 (Timelimit=00:10:00)
+
+Job ID: 66670
+Cluster: iridis_x
+User/Group: ejp1v21/
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 48
+CPU Utilized: 00:12:45
+CPU Efficiency: 3.04% of 06:59:12 core-walltime
+Job Wall-clock time: 00:08:44
+Memory Utilized: 19.80 GB
+Memory Efficiency: 11.11% of 178.12 GB
