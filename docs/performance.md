@@ -25,6 +25,18 @@ Using two processes and two A100 GPUs, so the I/O is parallel in this case.
 The times are averaged over 15 events. The file size of regular is skewed because it has to include the block, which
 must be adding in lots of additional data.
 
+However, I have also found setups where the strided slice output is faster than the regular slice output. For example,
+it is roughly 3-10x faster in a setup where the output frequency is decreased (e.g. write every 200 iterations rather
+than every iteration):
+
+| Method                   | Time (ms) |
+| ------------------------ | --------- |
+| Slice                    | 166       |
+| Slice with stride {5, 5} | 40        |
+
+The simulation ran on the same hardware and setup, and the results are an average over 35 calls. I'm unsure why the
+regular slice took longer this time.
+
 ## Optimisation
 
 The underlying issue for the strided output being slower is because it copies data from one `ops_dat` to
