@@ -15,6 +15,10 @@ directory is in `io_stride.cpp`.
 - `3_slice-with-stride`: an implementation using a parallel kernel with the
   slice output option
 - `4_slab-with-stride`: as above, but with a slab instead
+- `5_slice-with-stride-single`: same as `3_slice-with-stride` but output in
+  single precision
+- `6_benchmark`: a simulation used to benchmark the performance and file
+  sizes
 
 ## Building
 
